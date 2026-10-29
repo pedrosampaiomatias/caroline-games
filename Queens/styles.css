@@ -1,0 +1,706 @@
+/* ==========================================================================
+   LinkedIn Queens (queensv2) — Clean-Room Stylesheet
+   Reconstructed from exported LinkedIn CSS & DOM (queens_core.css)
+   ========================================================================== */
+
+:root {
+  /* Official 16 Queens Color Region Palette */
+  --queens-board-color1: #bba3e2;  /* 0: Lavender */
+  --queens-board-color2: #ffc992;  /* 1: Peach Orange */
+  --queens-board-color3: #96beff;  /* 2: Soft Blue */
+  --queens-board-color4: #b3dfa0;  /* 3: Pastel Green */
+  --queens-board-color5: #dfdfdf;  /* 4: Light Gray */
+  --queens-board-color6: #ff7b60;  /* 5: Vibrant Coral */
+  --queens-board-color7: #e6f388;  /* 6: Lime Yellow */
+  --queens-board-color8: #b9b29e;  /* 7: Warm Beige */
+  --queens-board-color9: #dfa0bf;  /* 8: Rose Pink */
+  --queens-board-color10: #a3d2d8; /* 9: Muted Teal */
+  --queens-board-color11: #62efea; /* 10: Bright Cyan */
+  --queens-board-color12: #ff93f3; /* 11: Hot Pink */
+  --queens-board-color13: #8acc6d; /* 12: Leaf Green */
+  --queens-board-color14: #729aec; /* 13: Sky Blue */
+  --queens-board-color15: #c387e0; /* 14: Soft Purple */
+  --queens-board-color16: #ffe04b; /* 15: Golden Yellow */
+
+  /* Theme tokens (Light default) */
+  --bg-page: #f4f2ee;
+  --bg-card: #ffffff;
+  --bg-elevated: #f8fafc;
+  --text-primary: rgba(0, 0, 0, 0.9);
+  --text-secondary: rgba(0, 0, 0, 0.6);
+  --border-subtle: rgba(0, 0, 0, 0.12);
+  --accent-primary: #0a66c2;
+  --accent-hover: #004182;
+  --error-red: #cb112d;
+  --error-bg: rgba(203, 17, 45, 0.08);
+  --board-border: #000000;
+  --grid-cell-line: rgba(0, 0, 0, 0.25);
+  --shadow-card: 0 4px 16px rgba(0, 0, 0, 0.07);
+}
+
+body.theme-dark {
+  --bg-page: #1b1f23;
+  --bg-card: #24292e;
+  --bg-elevated: #2d333b;
+  --text-primary: rgba(255, 255, 255, 0.92);
+  --text-secondary: rgba(255, 255, 255, 0.64);
+  --border-subtle: rgba(255, 255, 255, 0.14);
+  --accent-primary: #70b5f9;
+  --accent-hover: #a8d4ff;
+  --error-red: #f85149;
+  --error-bg: rgba(248, 81, 73, 0.14);
+  --shadow-card: 0 6px 24px rgba(0, 0, 0, 0.35);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--bg-page);
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.25rem 1rem 2.5rem;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Header & Top Toolbar */
+.app-container {
+  width: 100%;
+  max-width: 490px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--bg-card);
+  padding: 0.85rem 1.1rem;
+  border-radius: 12px;
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-card);
+}
+
+.brand-group {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.brand-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #bba3e2 0%, #ffc992 50%, #96beff 100%);
+  border: 2px solid #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
+}
+
+.brand-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: baseline;
+  gap: 0.45rem;
+}
+
+.edition-badge {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: var(--bg-elevated);
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid var(--border-subtle);
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.timer-pill {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 8px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+}
+
+.icon-btn {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.icon-btn:hover {
+  background: var(--border-subtle);
+}
+
+/* Puzzle & Generator Controls Bar */
+.toolbar-card {
+  background: var(--bg-card);
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.toolbar-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.puzzle-select {
+  flex: 1;
+  min-width: 190px;
+  padding: 0.45rem 0.65rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.45rem 0.8rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  transition: all 0.15s ease;
+}
+
+.btn:hover:not(:disabled) {
+  background: var(--border-subtle);
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: var(--accent-primary);
+  color: #fff;
+  border-color: transparent;
+}
+
+body.theme-dark .btn-primary {
+  color: #111;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--accent-hover);
+}
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-top: 0.45rem;
+  border-top: 1px solid var(--border-subtle);
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+}
+
+.toggle-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  user-select: none;
+  font-weight: 500;
+}
+
+.toggle-label input[type="checkbox"] {
+  accent-color: var(--accent-primary);
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+}
+
+/* ==========================================================================
+   Queens Game Board & Cells (Reconstructed from queens_core.css)
+   ========================================================================== */
+
+.board-card {
+  background: var(--bg-card);
+  padding: 1rem;
+  border-radius: 12px;
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.queens-board {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  max-width: 410px;
+  margin: 0 auto;
+  border-radius: 8px;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+}
+
+#queens-grid.queens-grid-no-gap {
+  display: grid;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  grid-template-rows: repeat(var(--rows, 7), 1fr);
+  grid-template-columns: repeat(var(--cols, 7), 1fr);
+  border: 3px solid #000000;
+  border-radius: 8px;
+  background-color: #000000;
+  overflow: hidden;
+}
+
+/* 16 Color Region Classes */
+.cell-color-0  { background-color: var(--queens-board-color1); }
+.cell-color-1  { background-color: var(--queens-board-color2); }
+.cell-color-2  { background-color: var(--queens-board-color3); }
+.cell-color-3  { background-color: var(--queens-board-color4); }
+.cell-color-4  { background-color: var(--queens-board-color5); }
+.cell-color-5  { background-color: var(--queens-board-color6); }
+.cell-color-6  { background-color: var(--queens-board-color7); }
+.cell-color-7  { background-color: var(--queens-board-color8); }
+.cell-color-8  { background-color: var(--queens-board-color9); }
+.cell-color-9  { background-color: var(--queens-board-color10); }
+.cell-color-10 { background-color: var(--queens-board-color11); }
+.cell-color-11 { background-color: var(--queens-board-color12); }
+.cell-color-12 { background-color: var(--queens-board-color13); }
+.cell-color-13 { background-color: var(--queens-board-color14); }
+.cell-color-14 { background-color: var(--queens-board-color15); }
+.cell-color-15 { background-color: var(--queens-board-color16); }
+
+.queens-cell-with-border {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  overflow: hidden;
+  transition: filter 0.1s ease;
+}
+
+.queens-cell-with-border:hover {
+  filter: brightness(0.96);
+}
+
+.queens-cell-with-border:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 3px #0a66c2;
+  z-index: 4;
+}
+
+/* Region Boundary Borders & Inner Cell Hairlines */
+.queens-cell-with-border .cell-border {
+  position: absolute;
+  inset: 0;
+  border: 0.5px solid rgba(0, 0, 0, 0.22);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.queens-cell-with-border .cell-border.with-top {
+  border-top: 1.5px solid #000000;
+}
+
+.queens-cell-with-border .cell-border.with-right {
+  border-right: 1.5px solid #000000;
+}
+
+.queens-cell-with-border .cell-border.with-bottom {
+  border-bottom: 1.5px solid #000000;
+}
+
+.queens-cell-with-border .cell-border.with-left {
+  border-left: 1.5px solid #000000;
+}
+
+/* Corner joint fillers for crisp 3px region boundaries */
+.queens-cell-with-border .cell-corner {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.queens-cell-with-border .cell-corner > div {
+  position: absolute;
+  width: 1.5px;
+  height: 1.5px;
+  background-color: #000000;
+}
+
+.queens-cell-with-border .cell-corner .with-right-bottom {
+  bottom: 0;
+  right: 0;
+}
+
+.queens-cell-with-border .cell-corner .with-right-top {
+  top: 0;
+  right: 0;
+}
+
+.queens-cell-with-border .cell-corner .with-left-bottom {
+  bottom: 0;
+  left: 0;
+}
+
+.queens-cell-with-border .cell-corner .with-left-top {
+  top: 0;
+  left: 0;
+}
+
+/* Cell Content (Cross & Queen Icons) */
+.queens-cell-with-border .cell-content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+}
+
+.cell-input {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.15s ease;
+}
+
+.cell-input--cross svg {
+  width: 18px;
+  height: 18px;
+}
+
+.cell-input--cross.is-auto-x svg path {
+  fill-opacity: 0.52;
+}
+
+.cell-input--queen,
+.cell-input--queen-with-flip {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.cell-input--queen .queens-icon-svg {
+  position: static;
+  display: block;
+  width: 24px;
+  height: 24px;
+  fill: rgba(0, 0, 0, 0.9);
+  filter: drop-shadow(0 1px 1px rgba(255, 255, 255, 0.35));
+}
+
+.cell-input--queen .queens-icon-svg--error {
+  fill: #cb112d;
+}
+
+/* Queen Flip on Solve (3D flip from black crown to golden royal crown) */
+.queen-flip-img {
+  width: 24px;
+  height: 24px;
+  perspective: 1000px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.queens-flip-img--inner {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  transition: transform 0.75s ease-out;
+  transform-style: preserve-3d;
+}
+
+.queens-board--queens-flipped .queens-flip-img--inner {
+  transform: rotateY(180deg);
+}
+
+.queens-flip-img--inner .queens-icon-svg,
+.queens-flip-img--inner .queens-icon-svg-back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 24px;
+  height: 24px;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.queens-flip-img--inner .queens-icon-svg-back {
+  transform: rotateY(180deg);
+}
+
+/* Error Stripes & Blinking */
+.queens-cell-with-border .cell-error {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 6px,
+    rgba(203, 17, 45, 0.65) 6px,
+    rgba(203, 17, 45, 0.65) 8.5px
+  );
+  pointer-events: none;
+}
+
+@keyframes error-blink {
+  50% {
+    background-color: #ffffff;
+  }
+}
+
+.queens-cell--error-blinking {
+  animation: error-blink 0.55s cubic-bezier(0, 0, 0.2, 1) 4;
+}
+
+/* Hint Shade & Scrim */
+.queens-cell-with-border .cell-shade {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.queens-cell-with-border .cell-shade--cross {
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 6px,
+    rgba(0, 0, 0, 0.45) 6px,
+    rgba(0, 0, 0, 0.45) 8px
+  );
+}
+
+.queens-cell-with-border .cell-shade--queen {
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 6px,
+    rgba(10, 102, 194, 0.55) 6px,
+    rgba(10, 102, 194, 0.55) 8.5px
+  );
+}
+
+.queens-cell-with-border .cell-scrim {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.46);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.queens-cell-with-border .cell-scrim--highlight {
+  background-color: transparent;
+  box-shadow: inset 0 0 0 2.5px #ffffff;
+}
+
+/* Shimmer / Shine animation on win */
+.queens-cell-with-border.shining::after {
+  content: "";
+  position: absolute;
+  top: -10%;
+  left: -120%;
+  width: 200%;
+  height: 120%;
+  background: linear-gradient(
+    115deg,
+    rgba(255, 255, 255, 0) 30%,
+    rgba(255, 255, 255, 0.78) 50%,
+    rgba(255, 255, 255, 0) 70%
+  );
+  transform: translateX(-100%);
+  animation: cell-shine 0.45s ease-out forwards;
+  z-index: 3;
+  pointer-events: none;
+}
+
+@keyframes cell-shine {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Under-board Controls */
+.under-board-controls {
+  display: flex;
+  width: 100%;
+  max-width: 410px;
+  gap: 0.6rem;
+  justify-content: space-between;
+}
+
+.under-board-controls .btn {
+  flex: 1;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.9rem;
+}
+
+/* Status, Hint & Error Cards */
+.queens-card {
+  width: 100%;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  padding: 0.9rem 1.1rem;
+  box-shadow: var(--shadow-card);
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.queens-card.hidden {
+  display: none;
+}
+
+.queens-error {
+  border-color: var(--error-red);
+  background: var(--error-bg);
+  color: var(--text-primary);
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.error-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: var(--error-red);
+}
+
+.hint-card {
+  border-color: var(--accent-primary);
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.hint-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 700;
+  color: var(--accent-primary);
+}
+
+.hint-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+/* How to Play Card */
+.rules-title {
+  font-weight: 700;
+  margin-bottom: 0.45rem;
+  font-size: 0.92rem;
+}
+
+.instructions-list {
+  padding-left: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  color: var(--text-secondary);
+}
+
+/* Win Modal Banner */
+.win-banner {
+  width: 100%;
+  background: linear-gradient(135deg, rgba(179, 223, 160, 0.28), rgba(150, 190, 255, 0.28));
+  border: 2px solid #2e7d32;
+  border-radius: 12px;
+  padding: 1rem 1.15rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  box-shadow: var(--shadow-card);
+}
+
+.win-banner.hidden {
+  display: none;
+}
+
+.win-info h2 {
+  font-size: 1.08rem;
+  font-weight: 700;
+  margin-bottom: 0.15rem;
+}
+
+.win-info p {
+  font-size: 0.84rem;
+  color: var(--text-secondary);
+}
+
+@media (max-width: 440px) {
+  .queens-cell-with-border .cell-input--queen .queens-icon-svg,
+  .queen-flip-img,
+  .queens-icon-svg,
+  .queens-icon-svg-back {
+    width: 20px;
+    height: 20px;
+  }
+}

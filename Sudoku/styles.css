@@ -1,0 +1,901 @@
+:root {
+  --sudoku-region-wall-width: 3.5px;
+  --sudoku-region-wall-half-width: 1.75px;
+  --sudoku-board-border-radius: 8px;
+  --sudoku-board-inner-border-radius: 5px;
+  --sudoku-cell-border-width: 3.5px;
+  --sudoku-grid-gap: 1px;
+
+  --sudoku-white: #ffffff;
+  --sudoku-light-mint-green: #f0fff7;
+  --sudoku-accent-green: #3a9666;
+  --sudoku-accent-green-hover: #2f7d54;
+  --sudoku-light-gray-green: #eff4f1;
+  --sudoku-light-green: #d6faee;
+  --sudoku-error-red: #cd112d;
+  --sudoku-error-background-light: #ffeef1;
+  --sudoku-near-black: #1a1a1a;
+  --sudoku-dark-blue-gray: #1b1f23;
+  --sudoku-dark-green: #21332a;
+  --sudoku-error-pink: #fd93a3;
+  --sudoku-error-background-dark: #640312;
+  --sudoku-near-white: #e6e6e6;
+
+  /* Light theme defaults */
+  --app-bg: #f4f2ee;
+  --card-bg: #ffffff;
+  --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  --sudoku-dark-gray: #404040;
+  --sudoku-medium-gray: #666666;
+  --sudoku-light-gray: #b3b3b3;
+  --sudoku-subtle-border: #d6d9dc;
+  --sudoku-board-background: var(--sudoku-white);
+  --sudoku-border-color: var(--sudoku-medium-gray);
+  --sudoku-input-button-color: var(--sudoku-light-gray-green);
+  --sudoku-input-button-hover: #e2ece6;
+  --sudoku-text-color: var(--sudoku-near-black);
+  --sudoku-muted-text: #5e666e;
+  --sudoku-scrim-message-info-bg: var(--sudoku-light-green);
+  --sudoku-scrim-message-error-bg: var(--sudoku-error-background-light);
+  --sudoku-cell-bg-default: var(--sudoku-board-background);
+  --sudoku-cell-color-error: var(--sudoku-error-red);
+  --sudoku-cell-bg-selected: var(--sudoku-light-mint-green);
+  --sudoku-cell-bg-contextual: #f4fbf7;
+  --sudoku-cell-bg-same-value: #dff7eb;
+  --sudoku-cell-border-selected: var(--sudoku-cell-border-width) solid var(--sudoku-accent-green);
+  --sudoku-cell-color-prefill: #8c8c8c;
+  --sudoku-cell-border-active-prefilled: var(--sudoku-cell-border-width) solid var(--sudoku-cell-color-prefill);
+  --sudoku-text-color-positive: var(--sudoku-accent-green);
+  --sudoku-cell-bg-shadow: rgba(52, 56, 60, 0.82);
+  --sudoku-remaining-number-bg: rgba(172, 172, 172, 0.35);
+}
+
+body.dark-mode {
+  --app-bg: #0f1317;
+  --card-bg: #1b1f23;
+  --card-shadow: 0 6px 28px rgba(0, 0, 0, 0.45);
+  --sudoku-light-gray: #bfbfbf;
+  --sudoku-medium-gray: #8b949e;
+  --sudoku-dark-gray: #30363d;
+  --sudoku-subtle-border: #30363d;
+  --sudoku-board-background: var(--sudoku-dark-blue-gray);
+  --sudoku-border-color: var(--sudoku-medium-gray);
+  --sudoku-input-button-color: #2c333a;
+  --sudoku-input-button-hover: #374049;
+  --sudoku-text-color: var(--sudoku-near-white);
+  --sudoku-muted-text: #9ca3af;
+  --sudoku-scrim-message-info-bg: var(--sudoku-dark-green);
+  --sudoku-scrim-message-error-bg: var(--sudoku-error-background-dark);
+  --sudoku-cell-bg-default: var(--sudoku-board-background);
+  --sudoku-cell-color-error: var(--sudoku-error-pink);
+  --sudoku-cell-bg-selected: var(--sudoku-dark-green);
+  --sudoku-cell-bg-contextual: #1e2b24;
+  --sudoku-cell-bg-same-value: #263e32;
+  --sudoku-cell-border-selected: var(--sudoku-cell-border-width) solid var(--sudoku-accent-green);
+  --sudoku-cell-color-prefill: #8f8f8f;
+  --sudoku-cell-border-active-prefilled: var(--sudoku-cell-border-width) solid var(--sudoku-cell-color-prefill);
+  --sudoku-text-color-positive: #5acf93;
+  --sudoku-cell-bg-shadow: rgba(15, 19, 23, 0.84);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--app-bg);
+  color: var(--sudoku-text-color);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 16px 12px 32px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.app-shell {
+  width: 100%;
+  max-width: 460px;
+  background-color: var(--card-bg);
+  border-radius: 16px;
+  box-shadow: var(--card-shadow);
+  padding: 16px 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border: 1px solid var(--sudoku-subtle-border);
+}
+
+/* Top App Header */
+.game-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--sudoku-subtle-border);
+}
+
+.game-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.game-logo {
+  width: 32px;
+  height: 32px;
+  border-radius: 7px;
+  background: linear-gradient(180deg, #45c684 0%, #337e57 100%);
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 2px;
+  padding: 4px;
+  color: #fff;
+  font-weight: 800;
+  font-size: 10px;
+  align-items: center;
+  justify-items: center;
+  box-shadow: 0 2px 6px rgba(58, 150, 102, 0.3);
+}
+
+.game-title-block h1 {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.game-subtitle {
+  font-size: 12px;
+  color: var(--sudoku-muted-text);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.icon-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--sudoku-text-color);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.icon-btn:hover {
+  background-color: var(--sudoku-input-button-color);
+}
+
+/* Generator / Level Bar */
+.generator-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 10px;
+  background-color: var(--sudoku-input-button-color);
+  border-radius: 10px;
+  font-size: 13px;
+}
+
+.generator-select-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.generator-select {
+  background-color: var(--sudoku-board-background);
+  color: var(--sudoku-text-color);
+  border: 1px solid var(--sudoku-subtle-border);
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.btn-new-puzzle {
+  background-color: var(--sudoku-accent-green);
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: background-color 0.15s ease, transform 0.1s ease;
+  white-space: nowrap;
+}
+
+.btn-new-puzzle:hover {
+  background-color: var(--sudoku-accent-green-hover);
+}
+
+.btn-new-puzzle:active {
+  transform: scale(0.97);
+}
+
+/* Over-board section (Timer | #Puzzle Name | Clear) */
+.sudoku-over-board-controls-container {
+  width: 100%;
+  padding: 4px 2px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 8px;
+}
+
+.sudoku-over-board-left {
+  justify-self: start;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.timer-pause-btn {
+  background: none;
+  border: none;
+  color: var(--sudoku-muted-text);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  padding: 2px;
+  border-radius: 4px;
+}
+
+.timer-pause-btn:hover {
+  color: var(--sudoku-text-color);
+}
+
+.sudoku-over-board-center {
+  justify-self: center;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--sudoku-text-color);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.difficulty-pill {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 10px;
+  background-color: var(--sudoku-input-button-color);
+  color: var(--sudoku-text-color-positive);
+}
+
+.sudoku-over-board-right {
+  justify-self: end;
+}
+
+.sudoku-reset-button {
+  background: transparent;
+  border: none;
+  color: var(--sudoku-muted-text);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.sudoku-reset-button:hover:not(:disabled) {
+  background-color: var(--sudoku-input-button-color);
+  color: var(--sudoku-text-color);
+}
+
+.sudoku-reset-button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* 6x6 Sudoku Board */
+.sudoku-board {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border: 3.5px solid var(--sudoku-border-color);
+  border-radius: var(--sudoku-board-border-radius);
+  background-color: var(--sudoku-board-background);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.sudoku-grid {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(6, 1fr);
+  background-color: var(--sudoku-board-background);
+  outline: none;
+}
+
+.sudoku-cell {
+  position: relative;
+  background-color: var(--sudoku-cell-bg-default);
+  cursor: pointer;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  user-select: none;
+  -webkit-user-select: none;
+  border-right: 1px solid var(--sudoku-subtle-border);
+  border-bottom: 1px solid var(--sudoku-subtle-border);
+  transition: background-color 0.08s ease;
+}
+
+.sudoku-cell.is-rightmost {
+  border-right: none;
+}
+
+.sudoku-cell.is-bottommost {
+  border-bottom: none;
+}
+
+/* Region walls (2x3 subgrids or custom regions) */
+.sudoku-cell.sudoku-cell-wall-right::before {
+  content: "";
+  position: absolute;
+  width: var(--sudoku-region-wall-width);
+  height: 100%;
+  right: calc(-1 * var(--sudoku-region-wall-half-width));
+  top: 0;
+  background-color: var(--sudoku-border-color);
+  z-index: 4;
+  pointer-events: none;
+}
+
+.sudoku-cell.sudoku-cell-wall-bottom::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: var(--sudoku-region-wall-width);
+  bottom: calc(-1 * var(--sudoku-region-wall-half-width));
+  left: 0;
+  background-color: var(--sudoku-border-color);
+  z-index: 4;
+  pointer-events: none;
+}
+
+/* Contextual & Active cell states */
+.sudoku-board.sudoku-board--highlight-sections .sudoku-cell.sudoku-cell-contextual {
+  background-color: var(--sudoku-cell-bg-contextual);
+}
+
+.sudoku-board.sudoku-board--highlight-sections .sudoku-cell.sudoku-cell-same-value {
+  background-color: var(--sudoku-cell-bg-same-value);
+}
+
+.sudoku-cell.sudoku-cell-active {
+  background-color: var(--sudoku-cell-bg-selected) !important;
+}
+
+.sudoku-cell-content {
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  border: var(--sudoku-cell-border-width) solid transparent;
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--sudoku-text-color);
+}
+
+.sudoku-cell.sudoku-cell-prefilled .sudoku-cell-content {
+  color: var(--sudoku-cell-color-prefill);
+  font-weight: 700;
+}
+
+.sudoku-cell.sudoku-cell-active:not(.sudoku-cell-prefilled) .sudoku-cell-content {
+  border: var(--sudoku-cell-border-selected);
+}
+
+.sudoku-cell.sudoku-cell-active.sudoku-cell-prefilled .sudoku-cell-content {
+  border: var(--sudoku-cell-border-active-prefilled);
+}
+
+/* Error / Exception states (LinkedIn diagonal stripe pattern) */
+.sudoku-board.sudoku-board--auto-error-checking .sudoku-cell.sudoku-cell-exceptions .sudoku-cell-content,
+.sudoku-cell.sudoku-cell-scrim-error-target .sudoku-cell-content {
+  color: var(--sudoku-cell-color-error);
+}
+
+.sudoku-board.sudoku-board--auto-error-checking .sudoku-cell.sudoku-cell-exceptions .sudoku-cell-content::before,
+.sudoku-cell.sudoku-cell-scrim-error-target .sudoku-cell-content::before {
+  content: "";
+  position: absolute;
+  inset: calc(-1 * var(--sudoku-cell-border-width));
+  z-index: 3;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    135deg,
+    transparent,
+    transparent 4px,
+    rgba(205, 17, 45, 0.25) 4px,
+    rgba(205, 17, 45, 0.25) 6px,
+    transparent 6px,
+    transparent 16px
+  );
+}
+
+/* Handwritten Notes Grid (3 columns x 2 rows inside cell) */
+.sudoku-cell-notes {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  padding: 3px;
+  gap: 1px;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+}
+
+.sudoku-cell-note {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+}
+
+.sudoku-cell-note svg {
+  display: block;
+}
+
+.sudoku-cell-note svg path {
+  fill: var(--sudoku-text-color);
+}
+
+/* Scrim Overlays (Used by Hint System) */
+.sudoku-cell-scrim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.sudoku-cell-scrim--above {
+  z-index: 3;
+}
+
+.sudoku-cell-scrim--below {
+  z-index: 1;
+}
+
+.sudoku-cell-scrim-shadowed {
+  background-color: var(--sudoku-cell-bg-shadow);
+}
+
+.sudoku-cell-scrim-context {
+  background-color: var(--sudoku-cell-bg-selected);
+}
+
+.sudoku-cell-scrim-highlight {
+  background-color: #bbf7d0;
+  box-shadow: inset 0 0 0 2px var(--sudoku-accent-green);
+}
+
+body.dark-mode .sudoku-cell-scrim-highlight {
+  background-color: #164e35;
+}
+
+.sudoku-cell-scrim-selected {
+  background-color: var(--sudoku-cell-bg-selected);
+  border: var(--sudoku-cell-border-selected);
+}
+
+/* Under-board Controls (Hint & Notes Toggle OR Scrim Banner) */
+.sudoku-under-board-wrapper {
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.sudoku-under-board-controls-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  width: 100%;
+  padding: 6px 0;
+  gap: 8px;
+}
+
+.sudoku-under-board__cta {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14.5px;
+  font-weight: 600;
+  gap: 7px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  color: var(--sudoku-text-color);
+  background: transparent;
+  border: 1px solid transparent;
+  transition: background-color 0.15s ease;
+}
+
+.sudoku-under-board__cta:hover:not(:disabled) {
+  background-color: var(--sudoku-input-button-color);
+}
+
+.sudoku-under-board__cta:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.sudoku-under-board__badge {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 6px;
+}
+
+.sudoku-under-board__text--active {
+  color: #ffffff;
+  background-color: var(--sudoku-accent-green);
+}
+
+.sudoku-under-board__text--disabled {
+  color: var(--sudoku-muted-text);
+  background-color: var(--sudoku-input-button-color);
+}
+
+/* Hint / Error Scrim Banner */
+.sudoku-under-board-scrim-message {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 8px 10px 8px 14px;
+  border-radius: 12px;
+  font-size: 13.5px;
+  line-height: 1.35;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.sudoku-under-board-scrim-message--info {
+  background-color: var(--sudoku-scrim-message-info-bg);
+  border: 1px solid rgba(58, 150, 102, 0.35);
+}
+
+.sudoku-under-board-scrim-message--error {
+  background-color: var(--sudoku-scrim-message-error-bg);
+  border: 1px solid rgba(205, 17, 45, 0.35);
+}
+
+.scrim-close-btn {
+  background: transparent;
+  border: none;
+  color: var(--sudoku-text-color);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.scrim-close-btn:hover {
+  background-color: rgba(0, 0, 0, 0.08);
+}
+
+/* 4x2 Input Buttons Grid (1-3 top, 4-6 bottom, Erase col 4 row 1, Undo col 4 row 2) */
+.sudoku-input-buttons-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 10px;
+  width: 100%;
+}
+
+.sudoku-input-button {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px;
+  background-color: var(--sudoku-input-button-color);
+  color: var(--sudoku-text-color);
+  border: none;
+  cursor: pointer;
+  min-height: 58px;
+  width: 100%;
+  border-radius: 12px;
+  font-size: 28px;
+  font-weight: 600;
+  transition: background-color 0.12s ease, transform 0.08s ease, opacity 0.15s ease;
+}
+
+.sudoku-input-button:hover:not(:disabled) {
+  background-color: var(--sudoku-input-button-hover);
+}
+
+.sudoku-input-button:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+.sudoku-input-button:disabled {
+  opacity: 0.22;
+  cursor: not-allowed;
+}
+
+.sudoku-input-button svg path {
+  fill: var(--sudoku-text-color);
+}
+
+.sudoku-input-button[data-number="erase"] {
+  grid-column: 4;
+  grid-row: 1;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.sudoku-input-button[data-number="undo"] {
+  grid-column: 4;
+  grid-row: 2;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.sudoku-input-button__remaining-count {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  font-size: 11px;
+  line-height: 1;
+  min-width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  background-color: var(--sudoku-accent-green);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-family: monospace;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Keyboard Shortcuts Footer Hint */
+.keyboard-hint-bar {
+  text-align: center;
+  font-size: 11.5px;
+  color: var(--sudoku-muted-text);
+  margin-top: 4px;
+}
+
+.keyboard-hint-bar kbd {
+  background-color: var(--sudoku-input-button-color);
+  border: 1px solid var(--sudoku-subtle-border);
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-size: 11px;
+  font-family: inherit;
+}
+
+/* Animations */
+@keyframes subCompletionPulse {
+  0% {
+    box-shadow: inset 0 0 0 0 rgba(58, 150, 102, 0.8);
+    background-color: rgba(90, 207, 147, 0.32);
+  }
+  100% {
+    box-shadow: inset 0 0 0 4px rgba(58, 150, 102, 0);
+    background-color: transparent;
+  }
+}
+
+.sudoku-cell.cell-completion-pulse::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+  animation: subCompletionPulse 0.9s cubic-bezier(0.18, 0.7, 0.2, 1) forwards;
+}
+
+@keyframes sudokuRowSlideRight {
+  0% { transform: translateX(0); }
+  50% { transform: translateX(8px); background-color: var(--sudoku-light-green); }
+  100% { transform: translateX(0); }
+}
+
+.sudoku-row-celebrate {
+  animation: sudokuRowSlideRight 0.55s ease-in-out;
+}
+
+/* Modals (Settings, How to Play, Win Celebration) */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 50;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s ease;
+}
+
+.modal-backdrop.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-card {
+  width: 100%;
+  max-width: 400px;
+  background-color: var(--card-bg);
+  color: var(--sudoku-text-color);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.28);
+  border: 1px solid var(--sudoku-subtle-border);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.modal-header h2 {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--sudoku-subtle-border);
+  gap: 12px;
+}
+
+.setting-row:last-child {
+  border-bottom: none;
+}
+
+.setting-label {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.setting-desc {
+  font-size: 12px;
+  color: var(--sudoku-muted-text);
+  margin-top: 2px;
+}
+
+/* Toggle Switch */
+.toggle-switch {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background-color: var(--sudoku-light-gray);
+  transition: 0.2s;
+  border-radius: 24px;
+}
+
+.toggle-slider::before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.2s;
+  border-radius: 50%;
+}
+
+.toggle-switch input:checked + .toggle-slider {
+  background-color: var(--sudoku-accent-green);
+}
+
+.toggle-switch input:checked + .toggle-slider::before {
+  transform: translateX(20px);
+}
+
+/* Win Celebration Stats */
+.win-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: 16px 0;
+}
+
+.win-stat-box {
+  background-color: var(--sudoku-input-button-color);
+  border-radius: 10px;
+  padding: 10px 8px;
+  text-align: center;
+}
+
+.win-stat-value {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--sudoku-text-color-positive);
+}
+
+.win-stat-label {
+  font-size: 11.5px;
+  color: var(--sudoku-muted-text);
+  margin-top: 2px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.btn-secondary {
+  flex: 1;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--sudoku-subtle-border);
+  background-color: var(--sudoku-input-button-color);
+  color: var(--sudoku-text-color);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-primary {
+  flex: 1;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: none;
+  background-color: var(--sudoku-accent-green);
+  color: #ffffff;
+  font-weight: 600;
+  cursor: pointer;
+}

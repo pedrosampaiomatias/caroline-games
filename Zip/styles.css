@@ -1,0 +1,849 @@
+/* ==========================================================================
+   LinkedIn Zip (Trail) — Clean-Room Stylesheet
+   Reconstructed from inspect_web_page & exported CSS rules (.trail-*)
+   ========================================================================== */
+
+:root,
+[data-theme="light"] {
+  --bg-page: #f4f2ee;
+  --bg-card: #ffffff;
+  --bg-elevated: #f8fafc;
+  --bg-cell: #ffffff;
+  --bg-cell-hover: #f9fafb;
+  --text-primary: rgba(0, 0, 0, 0.9);
+  --text-secondary: rgba(0, 0, 0, 0.6);
+  --text-muted: rgba(0, 0, 0, 0.45);
+  --border-subtle: rgba(0, 0, 0, 0.08);
+  --grid-border-color: #a3a19c;
+  --grid-lines-color: #e6e4e0;
+  --wall-color: #1b1f23;
+  --wall-hint-color: #0a66c2;
+  --dot-bg: #1b1f23;
+  --dot-text: #ffffff;
+  --dot-connected-bg: #ffffff;
+  --dot-connected-text: #1b1f23;
+  --locked-color: #2fad4e;
+  --error-red: #cb112d;
+  --accent-blue: #0a66c2;
+  --accent-blue-hover: #004182;
+  --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04);
+  --shadow-btn: 0 2px 5px rgba(0, 0, 0, 0.08);
+  --board-size: 406px;
+  --grid-size: 7;
+  --cell-size: calc(var(--board-size) / var(--grid-size));
+  --trail-width: calc(var(--cell-size) * 0.64);
+  --dot-size: calc(var(--cell-size) * 0.56);
+}
+
+[data-theme="dark"] {
+  --bg-page: #1b1f23;
+  --bg-card: #24292e;
+  --bg-elevated: #2d333b;
+  --bg-cell: #24292e;
+  --bg-cell-hover: #2d333b;
+  --text-primary: rgba(255, 255, 255, 0.92);
+  --text-secondary: rgba(255, 255, 255, 0.65);
+  --text-muted: rgba(255, 255, 255, 0.45);
+  --border-subtle: rgba(255, 255, 255, 0.12);
+  --grid-border-color: #3d444d;
+  --grid-lines-color: #343a42;
+  --wall-color: #f0f6fc;
+  --wall-hint-color: #58a6ff;
+  --dot-bg: #f0f6fc;
+  --dot-text: #1b1f23;
+  --dot-connected-bg: #1b1f23;
+  --dot-connected-text: #f0f6fc;
+  --locked-color: #2fad4e;
+  --error-red: #f85149;
+  --accent-blue: #58a6ff;
+  --accent-blue-hover: #79c0ff;
+  --shadow-card: 0 8px 28px rgba(0, 0, 0, 0.35);
+  --shadow-btn: 0 2px 6px rgba(0, 0, 0, 0.35);
+}
+
+/* Official LinkedIn Zip 7 Color Themes */
+.color-theme-1 {
+  --FirstColor: #ee352e;
+  --SecondColor: #f69b01;
+  --LightColor: #fde6d8;
+}
+.color-theme-2 {
+  --FirstColor: #ee5b14;
+  --SecondColor: #f69b01;
+  --LightColor: #fdeddb;
+}
+.color-theme-3 {
+  --FirstColor: #69cd38;
+  --SecondColor: #00933c;
+  --LightColor: #dcf5e3;
+}
+.color-theme-4 {
+  --FirstColor: #00933c;
+  --SecondColor: #01a1e2;
+  --LightColor: #d9f2fa;
+}
+.color-theme-5 {
+  --FirstColor: #01a1e2;
+  --SecondColor: #0049d5;
+  --LightColor: #dcebfa;
+}
+.color-theme-6 {
+  --FirstColor: #0049d5;
+  --SecondColor: #b933ad;
+  --LightColor: #f0ddf5;
+}
+.color-theme-7 {
+  --FirstColor: #b933ad;
+  --SecondColor: #ee352e;
+  --LightColor: #fbe0ec;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--bg-page);
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 16px 48px;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* Top App Container */
+.app-container {
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Header */
+.game-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-card);
+  padding: 14px 18px;
+  border-radius: 16px;
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--border-subtle);
+}
+
+.brand-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--FirstColor, #ee5b14), var(--SecondColor, #f69b01));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 800;
+  font-size: 1.15rem;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.16);
+  position: relative;
+}
+
+.brand-title h1 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.brand-subtitle {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.icon-btn {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.12s ease, background-color 0.15s ease;
+}
+
+.icon-btn:hover {
+  background: var(--bg-cell-hover);
+  transform: translateY(-1px);
+}
+
+/* Toolbar: Preset / Generator + Color Swatches */
+.toolbar-card {
+  background: var(--bg-card);
+  padding: 12px 16px;
+  border-radius: 16px;
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.toolbar-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.select-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+
+.puzzle-select {
+  flex: 1;
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  padding: 8px 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+}
+
+.btn-generate {
+  background: var(--accent-blue);
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  padding: 8px 13px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: background-color 0.15s ease, transform 0.1s ease;
+  white-space: nowrap;
+}
+
+.btn-generate:hover {
+  background: var(--accent-blue-hover);
+}
+
+.btn-generate:active {
+  transform: scale(0.97);
+}
+
+/* Color Theme Picker */
+.theme-swatches {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.theme-swatch {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.theme-swatch:hover {
+  transform: scale(1.15);
+}
+
+.theme-swatch.is-selected {
+  border-color: var(--text-primary);
+  transform: scale(1.15);
+}
+
+/* Status Bar (Timer, Progress, Backtracks, Clear) */
+.status-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-card);
+  padding: 10px 16px;
+  border-radius: 14px;
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--border-subtle);
+}
+
+.metrics-group {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.metric-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.metric-label {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.metric-value {
+  font-size: 0.98rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.progress-pill {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Main Game Card */
+.board-card {
+  background: var(--bg-card);
+  border-radius: 24px;
+  padding: 20px 16px;
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  position: relative;
+}
+
+/* Error / Hint Notification Banner */
+.message-banner {
+  width: 100%;
+  max-width: var(--board-size);
+  min-height: 38px;
+  border-radius: 12px;
+  padding: 8px 14px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.message-banner.is-neutral {
+  background: var(--bg-elevated);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-subtle);
+}
+
+.message-banner.is-error {
+  background: rgba(203, 17, 45, 0.1);
+  color: var(--error-red);
+  border: 1px solid rgba(203, 17, 45, 0.3);
+  animation: shakeBanner 0.35s ease;
+}
+
+.message-banner.is-hint {
+  background: rgba(47, 173, 78, 0.12);
+  color: var(--locked-color);
+  border: 1px solid rgba(47, 173, 78, 0.35);
+}
+
+@keyframes shakeBanner {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+/* ==========================================================================
+   Zip Board (.trail-board & .trail-grid)
+   Matches LinkedIn's 28px rounded container with SVG trail + interactive cells
+   ========================================================================== */
+.trail-board-wrapper {
+  position: relative;
+  width: var(--board-size);
+  height: var(--board-size);
+  max-width: calc(100vw - 64px);
+  max-height: calc(100vw - 64px);
+  user-select: none;
+  touch-action: none;
+}
+
+.trail-board {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 28px;
+  border: 6px solid var(--grid-border-color);
+  background: var(--bg-cell);
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px var(--border-subtle);
+  transition: transform 0.35s ease, border-color 0.25s ease;
+}
+
+.trail-board.is-won {
+  border-color: var(--SecondColor, #00933c);
+  animation: boardWinPulse 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes boardWinPulse {
+  0% { transform: scale(1); }
+  35% { transform: scale(1.025); }
+  100% { transform: scale(1); }
+}
+
+/* SVG Trail Layer */
+.trail-svg-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Interactive Grid Layer */
+.trail-grid {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(var(--grid-size), 1fr);
+  grid-template-rows: repeat(var(--grid-size), 1fr);
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+}
+
+.trail-cell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid var(--grid-lines-color);
+  border-bottom: 1px solid var(--grid-lines-color);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.trail-cell.no-right-border {
+  border-right: none;
+}
+
+.trail-cell.no-bottom-border {
+  border-bottom: none;
+}
+
+.trail-cell:hover {
+  background-color: rgba(127, 127, 127, 0.05);
+}
+
+.trail-cell:focus-visible {
+  outline: 3px solid var(--accent-blue);
+  outline-offset: -3px;
+  z-index: 6;
+}
+
+/* Cell Win Shimmer Wave */
+.trail-cell.win-wave {
+  animation: cellWinWave 0.65s ease forwards;
+}
+
+@keyframes cellWinWave {
+  0% { background-color: transparent; }
+  45% { background-color: var(--LightColor, rgba(255, 255, 255, 0.4)); }
+  100% { background-color: transparent; }
+}
+
+/* Numbered Checkpoint Dots (.trail-cell-content) */
+.trail-cell-content {
+  width: var(--dot-size);
+  height: var(--dot-size);
+  border-radius: 50%;
+  background: var(--dot-bg);
+  color: var(--dot-text);
+  font-weight: 700;
+  font-size: calc(var(--dot-size) * 0.48);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 4;
+  position: relative;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+              background-color 0.2s ease,
+              color 0.2s ease,
+              box-shadow 0.2s ease;
+}
+
+.trail-cell-content.is-connected {
+  background: var(--dot-connected-bg);
+  color: var(--dot-connected-text);
+  transform: scale(1.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.24);
+}
+
+.trail-cell-content.is-head {
+  transform: scale(1.16);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.85), 0 4px 10px rgba(0, 0, 0, 0.28);
+}
+
+.trail-cell-content.is-error-checkpoint {
+  background: var(--error-red);
+  color: #ffffff;
+  animation: errorPulse 0.4s ease;
+}
+
+@keyframes errorPulse {
+  0%, 100% { transform: scale(1.08); }
+  50% { transform: scale(1.24); }
+}
+
+/* Pulsating Ring on Start Checkpoint when path length == 1 */
+.trail-start-ring {
+  position: absolute;
+  width: calc(var(--dot-size) * 1.28);
+  height: calc(var(--dot-size) * 1.28);
+  border-radius: 50%;
+  border: 2.5px solid var(--FirstColor, #ee5b14);
+  animation: startRingPulse 1.8s infinite ease-out;
+  pointer-events: none;
+  z-index: 3;
+}
+
+@keyframes startRingPulse {
+  0% {
+    transform: scale(0.88);
+    opacity: 0.9;
+  }
+  70% {
+    transform: scale(1.3);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.3);
+    opacity: 0;
+  }
+}
+
+/* Head Dot when current head is NOT on a numbered checkpoint */
+.trail-head-dot {
+  width: calc(var(--dot-size) * 0.42);
+  height: calc(var(--dot-size) * 0.42);
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.28);
+  z-index: 4;
+  pointer-events: none;
+  transition: transform 0.15s ease;
+}
+
+/* Next-Cell Hint Arrow */
+.trail-hint-indicator {
+  width: calc(var(--dot-size) * 0.45);
+  height: calc(var(--dot-size) * 0.45);
+  border-radius: 50%;
+  border: 2.5px dashed var(--locked-color);
+  background: rgba(47, 173, 78, 0.18);
+  z-index: 4;
+  pointer-events: none;
+  animation: hintBounce 1s infinite alternate ease-in-out;
+}
+
+@keyframes hintBounce {
+  from { transform: scale(0.88); opacity: 0.7; }
+  to { transform: scale(1.15); opacity: 1; }
+}
+
+/* ==========================================================================
+   Cell Walls (.trail-cell-wall--right, .trail-cell-wall--down)
+   Matches LinkedIn's thick rounded walls blocking orthogonal adjacency
+   ========================================================================== */
+.trail-cell-wall {
+  position: absolute;
+  background-color: var(--wall-color);
+  z-index: 5;
+  pointer-events: none;
+  border-radius: 999px;
+}
+
+.trail-cell-wall--right {
+  top: -3px;
+  bottom: -3px;
+  right: -3.5px;
+  width: 6px;
+}
+
+.trail-cell-wall--down {
+  left: -3px;
+  right: -3px;
+  bottom: -3.5px;
+  height: 6px;
+}
+
+.trail-cell-wall--hint {
+  background: repeating-linear-gradient(
+    45deg,
+    var(--wall-hint-color),
+    var(--wall-hint-color) 4px,
+    transparent 4px,
+    transparent 8px
+  );
+  box-shadow: 0 0 6px rgba(10, 102, 194, 0.45);
+}
+
+/* ==========================================================================
+   Control Buttons (Undo, Hint, Reset)
+   ========================================================================== */
+.controls-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  width: 100%;
+  max-width: var(--board-size);
+}
+
+.control-btn {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+  border-radius: 999px;
+  padding: 11px 16px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  box-shadow: var(--shadow-btn);
+  transition: background-color 0.15s ease, transform 0.1s ease, opacity 0.15s ease;
+}
+
+.control-btn:hover:not(:disabled) {
+  background: var(--bg-cell-hover);
+  transform: translateY(-1px);
+}
+
+.control-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.control-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.control-btn.btn-hint {
+  border-color: rgba(47, 173, 78, 0.4);
+}
+
+.badge-count {
+  background: var(--locked-color);
+  color: #fff;
+  font-size: 0.72rem;
+  padding: 1px 6px;
+  border-radius: 999px;
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   How to Play Card (Matches LinkedIn Zip rules footer)
+   ========================================================================== */
+.rules-card {
+  background: var(--bg-card);
+  border-radius: 16px;
+  padding: 16px 18px;
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.rules-title {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.rules-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.rule-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.35;
+}
+
+.rule-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.78rem;
+  color: var(--text-primary);
+  flex-shrink: 0;
+}
+
+/* ==========================================================================
+   Win Modal Overlay
+   ========================================================================== */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 50;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.modal-backdrop.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-card {
+  background: var(--bg-card);
+  border-radius: 24px;
+  padding: 28px 24px;
+  width: 100%;
+  max-width: 380px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--border-subtle);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  transform: translateY(16px) scale(0.96);
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.modal-backdrop.is-open .modal-card {
+  transform: translateY(0) scale(1);
+}
+
+.win-badge {
+  width: 60px;
+  height: 60px;
+  border-radius: 18px;
+  margin: 0 auto;
+  background: linear-gradient(135deg, var(--FirstColor, #ee5b14), var(--SecondColor, #f69b01));
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  font-weight: 800;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+}
+
+.modal-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  background: var(--bg-elevated);
+  padding: 14px 10px;
+  border-radius: 16px;
+  border: 1px solid var(--border-subtle);
+}
+
+.modal-stat-val {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.modal-stat-lbl {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-top: 2px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.modal-btn {
+  flex: 1;
+  padding: 12px 16px;
+  border-radius: 999px;
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+}
+
+.modal-btn.is-primary {
+  background: var(--accent-blue);
+  color: #ffffff;
+  border-color: transparent;
+}
+
+@media (max-width: 460px) {
+  :root {
+    --board-size: min(350px, calc(100vw - 52px));
+  }
+  .rules-grid {
+    grid-template-columns: 1fr;
+  }
+}

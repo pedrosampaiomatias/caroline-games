@@ -1,0 +1,19 @@
+{
+  "name": "Caroline Games — Daily Puzzle Arcade",
+  "short_name": "Caroline Games",
+  "description": "Six daily logic, spatial, and word puzzle games (Mini Sudoku, Zip, Tango, Queens, Patches, and Wend) with unlimited procedural generators and Daily Gauntlet.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f4f2ee",
+  "theme_color": "#7c3aed",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

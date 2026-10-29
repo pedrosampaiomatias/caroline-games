@@ -1,0 +1,721 @@
+/* ==========================================================================
+   LinkedIn Wend — Clean-Room Stylesheet
+   Reconstructed via REA MCP inspection of live Puzzle #142 & C7ZU1-qQ.js
+   ========================================================================== */
+
+:root {
+  --bg-page: #f4f2ee;
+  --bg-card: #ffffff;
+  --bg-elevated: #f8fafc;
+  --bg-hole: #eae6df;
+  --text-primary: rgba(0, 0, 0, 0.9);
+  --text-secondary: rgba(0, 0, 0, 0.62);
+  --border-subtle: rgba(0, 0, 0, 0.12);
+  --grid-hairline: rgba(0, 0, 0, 0.13);
+  --board-border: rgba(0, 0, 0, 0.84);
+  --accent-primary: #0a66c2;
+  --accent-hover: #004182;
+  --error-red: #cb112d;
+  --success-green: #057642;
+  --shadow-card: 0 4px 16px rgba(0, 0, 0, 0.07);
+}
+
+body.theme-dark {
+  --bg-page: #1b1f23;
+  --bg-card: #24292e;
+  --bg-elevated: #2d333b;
+  --bg-hole: #16191d;
+  --text-primary: rgba(255, 255, 255, 0.92);
+  --text-secondary: rgba(255, 255, 255, 0.64);
+  --border-subtle: rgba(255, 255, 255, 0.14);
+  --grid-hairline: rgba(255, 255, 255, 0.13);
+  --board-border: rgba(255, 255, 255, 0.82);
+  --accent-primary: #70b5f9;
+  --accent-hover: #a8d4ff;
+  --error-red: #f85149;
+  --success-green: #3fb950;
+  --shadow-card: 0 6px 24px rgba(0, 0, 0, 0.35);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--bg-page);
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.15rem 1rem 2.5rem;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.app-container {
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+/* Header */
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--bg-card);
+  padding: 0.8rem 1.1rem;
+  border-radius: 12px;
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-card);
+}
+
+.brand-group {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.brand-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  background: linear-gradient(135deg, #fb5239, #f68e00);
+  color: #ffffff;
+  font-weight: 900;
+  font-size: 1.15rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(251, 82, 57, 0.35);
+}
+
+.brand-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: baseline;
+  gap: 0.45rem;
+}
+
+.edition-badge {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: var(--bg-elevated);
+  padding: 0.14rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid var(--border-subtle);
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.lang-toggle {
+  display: inline-flex;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 2px;
+  gap: 2px;
+}
+
+.lang-btn {
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding: 0.28rem 0.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.lang-btn.active {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+body.theme-dark .lang-btn.active {
+  color: #111111;
+}
+
+.timer-pill {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  font-size: 0.96rem;
+  padding: 0.32rem 0.65rem;
+  border-radius: 8px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+}
+
+.icon-btn {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.icon-btn:hover {
+  background: var(--border-subtle);
+}
+
+/* Toolbar & Generator */
+.toolbar-card {
+  background: var(--bg-card);
+  padding: 0.7rem 0.95rem;
+  border-radius: 12px;
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.toolbar-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.puzzle-select {
+  flex: 1;
+  min-width: 195px;
+  padding: 0.45rem 0.65rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  font-size: 0.86rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.45rem 0.85rem;
+  border-radius: 999px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  transition: all 0.15s ease;
+}
+
+.btn:hover:not(:disabled) {
+  background: var(--border-subtle);
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: var(--accent-primary);
+  color: #ffffff;
+  border-color: transparent;
+}
+
+body.theme-dark .btn-primary {
+  color: #111111;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--accent-hover);
+}
+
+/* Instructions Banner Above Board */
+.goal-banner {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  padding: 0.7rem 1rem;
+  box-shadow: var(--shadow-card);
+  font-size: 0.88rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.goal-banner ul {
+  padding-left: 1.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.18rem;
+}
+
+/* ==========================================================================
+   Wend Board, Hole Cells, SVG Snake Paths, Start Dots & Direction Chevrons
+   ========================================================================== */
+
+.board-card {
+  background: var(--bg-card);
+  padding: 1rem;
+  border-radius: 12px;
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.wend-board-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 375px;
+  aspect-ratio: var(--grid-cols, 5) / var(--grid-rows, 5);
+  margin: 0 auto;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+}
+
+.wend-grid {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(var(--grid-cols, 5), 1fr);
+  grid-template-rows: repeat(var(--grid-rows, 5), 1fr);
+  border: 2.5px solid var(--board-border);
+  border-radius: 14px;
+  background-color: var(--bg-card);
+  overflow: hidden;
+}
+
+.wend-cell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid var(--grid-hairline);
+  border-bottom: 1px solid var(--grid-hairline);
+  cursor: pointer;
+  overflow: visible;
+}
+
+.wend-cell.is-last-col {
+  border-right: none;
+}
+
+.wend-cell.is-last-row {
+  border-bottom: none;
+}
+
+.wend-cell.is-hole {
+  border-right: none;
+  border-bottom: none;
+  background-color: var(--bg-hole);
+  background-image: repeating-linear-gradient(
+    -45deg,
+    rgba(0, 0, 0, 0.055),
+    rgba(0, 0, 0, 0.055) 5px,
+    transparent 5px,
+    transparent 10px
+  );
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.12);
+  cursor: default;
+  pointer-events: none;
+  z-index: 3;
+}
+
+body.theme-dark .wend-cell.is-hole {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    rgba(255, 255, 255, 0.04),
+    rgba(255, 255, 255, 0.04) 5px,
+    transparent 5px,
+    transparent 10px
+  );
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.45);
+}
+
+/* Hole edge borders matching holeEdgeMask in C7ZU1-qQ.js */
+.wend-cell.is-hole.hole-edge-top {
+  border-top: 2.5px solid var(--board-border);
+}
+.wend-cell.is-hole.hole-edge-right {
+  border-right: 2.5px solid var(--board-border);
+}
+.wend-cell.is-hole.hole-edge-bottom {
+  border-bottom: 2.5px solid var(--board-border);
+}
+.wend-cell.is-hole.hole-edge-left {
+  border-left: 2.5px solid var(--board-border);
+}
+
+.wend-cell:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 3px var(--accent-primary);
+  z-index: 15;
+}
+
+/* Selected cell soft tint */
+.wend-cell-tint {
+  position: absolute;
+  inset: 0;
+  background-color: var(--word-color, #fb5239);
+  opacity: 0.14;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+}
+
+.wend-cell.is-locked .wend-cell-tint {
+  opacity: 0.24;
+}
+
+/* SVG Path Connector Layer inside each cell (viewBox 0 0 100 100) */
+.wend-cell-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+  color: var(--word-color, #fb5239);
+  overflow: visible;
+}
+
+.wend-path-line {
+  stroke: currentColor;
+  stroke-width: 56;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+  opacity: 0.88;
+}
+
+.wend-cell.is-dragging-active .wend-path-line {
+  stroke-width: 50;
+}
+
+.wend-start-outer {
+  fill: #ffffff;
+  stroke: currentColor;
+  stroke-width: 7;
+}
+
+body.theme-dark .wend-start-outer {
+  fill: #1b1f23;
+}
+
+.wend-start-inner {
+  fill: currentColor;
+}
+
+/* Letter Text */
+.wend-letter {
+  position: relative;
+  z-index: 4;
+  font-size: 1.42rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  pointer-events: none;
+  transition: transform 0.12s ease, color 0.12s ease;
+}
+
+.wend-cell.is-selected .wend-letter {
+  color: #ffffff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.42);
+  transform: scale(1.05);
+}
+
+/* Directional Chevron between cells */
+.wend-chevron {
+  position: absolute;
+  z-index: 5;
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 0.78rem;
+  font-weight: 900;
+  pointer-events: none;
+  line-height: 1;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
+.wend-chevron--RIGHT {
+  left: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.wend-chevron--LEFT {
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.wend-chevron--DOWN {
+  top: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.wend-chevron--UP {
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Locked Word Check Badge on Start Cell (cell-X-locked-check) */
+.wend-cell-lock-badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  z-index: 6;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--word-color, #00b382);
+  border: 1.5px solid #ffffff;
+  color: #ffffff;
+  font-size: 0.65rem;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.28);
+  pointer-events: none;
+}
+
+/* Hint Highlight Ring */
+.wend-cell.is-hint-highlighted::after {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border-radius: 8px;
+  border: 3px dashed var(--accent-primary);
+  z-index: 8;
+  pointer-events: none;
+  animation: hint-pulse 1.1s infinite ease-in-out;
+}
+
+@keyframes hint-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+/* ==========================================================================
+   Current Word Display & Status Message Banner (a6 & a8 in C7ZU1-qQ.js)
+   ========================================================================== */
+
+.wend-status-bar {
+  width: 100%;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wend-current-word-blocks {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+}
+
+.wend-current-block {
+  width: 32px;
+  height: 34px;
+  border-radius: 7px;
+  background-color: var(--block-color, #fb5239);
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.16);
+}
+
+.wend-board-message {
+  width: 100%;
+  max-width: 375px;
+  background: var(--bg-elevated);
+  border: 1.5px solid var(--accent-primary);
+  border-radius: 10px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.84rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.wend-board-message.is-warning {
+  border-color: var(--error-red);
+  color: var(--error-red);
+}
+
+/* ==========================================================================
+   Word List Slots (ni & nl in C7ZU1-qQ.js)
+   ========================================================================== */
+
+.wend-word-list {
+  width: 100%;
+  max-width: 375px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.wend-word-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.wend-word-slots {
+  display: flex;
+  align-items: center;
+  gap: 0.28rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.wend-slot {
+  width: 32px;
+  height: 34px;
+  border-radius: 7px;
+  border: 2px solid var(--border-subtle);
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  font-weight: 800;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.wend-slot.is-filled {
+  background: var(--row-color, #fb5239);
+  border-color: var(--row-color, #fb5239);
+  color: #ffffff;
+}
+
+.wend-slot.is-preset-neutral {
+  border-style: dashed;
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+.wend-slot.is-overflow {
+  background: rgba(203, 17, 45, 0.14);
+  border-color: var(--error-red);
+  color: var(--error-red);
+}
+
+.wend-row-check {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--success-green);
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 900;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Under-board Controls */
+.under-board-controls {
+  display: flex;
+  width: 100%;
+  max-width: 375px;
+  gap: 0.55rem;
+  justify-content: space-between;
+}
+
+.under-board-controls .btn {
+  flex: 1;
+  padding: 0.52rem 0.7rem;
+  font-size: 0.88rem;
+}
+
+/* Win Banner */
+.win-banner {
+  width: 100%;
+  background: linear-gradient(135deg, rgba(0, 179, 130, 0.16), rgba(0, 144, 231, 0.16));
+  border: 2px solid #00b382;
+  border-radius: 12px;
+  padding: 0.95rem 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  box-shadow: var(--shadow-card);
+}
+
+.win-banner.hidden {
+  display: none;
+}
+
+.win-info h2 {
+  font-size: 1.05rem;
+  font-weight: 800;
+  margin-bottom: 0.15rem;
+}
+
+.win-info p {
+  font-size: 0.83rem;
+  color: var(--text-secondary);
+}
+
+.words-found-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.35rem;
+}
+
+.word-pill {
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  color: #ffffff;
+}
+
+/* Footer Card */
+.info-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  padding: 0.85rem 1.05rem;
+  box-shadow: var(--shadow-card);
+  font-size: 0.84rem;
+  color: var(--text-secondary);
+  line-height: 1.45;
+}

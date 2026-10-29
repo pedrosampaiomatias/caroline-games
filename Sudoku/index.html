@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mini Sudoku (6×6) — Clean-Room Edition</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app-shell">
+    <!-- Top Header -->
+    <header class="game-header">
+      <div class="game-brand">
+        <div class="game-logo" aria-hidden="true">
+          <span>1</span><span>2</span><span>3</span><span>4</span>
+        </div>
+        <div class="game-title-block">
+          <h1>Mini Sudoku</h1>
+          <div class="game-subtitle">Clean-Room 6×6 + Procedural Generator</div>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button type="button" class="icon-btn" id="btn-theme-toggle" title="Toggle Dark Mode" aria-label="Toggle Dark Mode">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        </button>
+        <button type="button" class="icon-btn" id="btn-open-help" title="How to Play" aria-label="How to Play">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+        </button>
+        <button type="button" class="icon-btn" id="btn-open-settings" title="Settings" aria-label="Settings">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Procedural Level Generator & Preset Selector -->
+    <section class="generator-toolbar" aria-label="Level Generator">
+      <div class="generator-select-group">
+        <label for="preset-select" style="font-weight:600;">Mode:</label>
+        <select id="preset-select" class="generator-select">
+          <optgroup label="Captured Live Presets">
+            <option value="preset:fireplace" selected>#443 Fireplace (Live Capture)</option>
+            <option value="preset:zipper">#101 Zipper (Built-in)</option>
+            <option value="preset:pointer">#102 Pointer (Built-in)</option>
+          </optgroup>
+          <optgroup label="Procedural Generator">
+            <option value="gen:Easy">Procedural — Easy (15 clues)</option>
+            <option value="gen:Medium">Procedural — Medium (12 clues)</option>
+            <option value="gen:Hard">Procedural — Hard (10 clues)</option>
+          </optgroup>
+        </select>
+      </div>
+      <button type="button" class="btn-new-puzzle" id="btn-new-puzzle">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+        </svg>
+        Generate Level
+      </button>
+    </section>
+
+    <!-- Over-Board Section (Timer | Puzzle Title | Clear) -->
+    <section class="sudoku-over-board-controls-container">
+      <div class="sudoku-over-board-left">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+        </svg>
+        <span id="timer-text">0:00</span>
+      </div>
+      <div class="sudoku-over-board-center">
+        <span id="puzzle-title">#443 Fireplace</span>
+        <span class="difficulty-pill" id="difficulty-pill">Medium</span>
+      </div>
+      <div class="sudoku-over-board-right">
+        <button type="button" class="sudoku-reset-button" id="btn-clear-board">Clear</button>
+      </div>
+    </section>
+
+    <!-- 6x6 Sudoku Board -->
+    <section class="sudoku-board" id="sudoku-board" data-sudoku-grid="true" aria-label="Mini Sudoku board">
+      <div class="sudoku-grid" id="sudoku-grid" tabindex="0"></div>
+    </section>
+
+    <!-- Under-Board Controls (Hint / Notes OR Hint Scrim Banner) -->
+    <div class="sudoku-under-board-wrapper" id="under-board-wrapper"></div>
+
+    <!-- 4x2 Input Keypad (1-6, Erase, Undo) -->
+    <section class="sudoku-input-buttons-container" id="number-buttons-container" aria-label="Number keypad"></section>
+
+    <footer class="keyboard-hint-bar">
+      Keys: <kbd>1</kbd>–<kbd>6</kbd> input &middot; <kbd>Arrows</kbd> move &middot; <kbd>N</kbd> notes &middot; <kbd>H</kbd> hint &middot; <kbd>U</kbd> undo &middot; <kbd>Backspace</kbd> erase
+    </footer>
+  </main>
+
+  <!-- Settings Modal -->
+  <div class="modal-backdrop" id="settings-modal" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2 id="settings-title">Game Settings</h2>
+        <button type="button" class="icon-btn" id="btn-close-settings" aria-label="Close settings">✕</button>
+      </div>
+
+      <div class="setting-row">
+        <div>
+          <div class="setting-label">Auto-check for errors</div>
+          <div class="setting-desc">Highlight duplicate or incorrect numbers with diagonal red stripes</div>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="toggle-auto-error" checked />
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div class="setting-row">
+        <div>
+          <div class="setting-label">Highlight sections &amp; matching numbers</div>
+          <div class="setting-desc">Shade the active row, column, 2×3 region, and identical values</div>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="toggle-highlight-sections" checked />
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div class="setting-row">
+        <div>
+          <div class="setting-label">Show remaining counts</div>
+          <div class="setting-desc">Display how many of each number (1–6) remain to be placed</div>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="toggle-remaining-counts" checked />
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div class="setting-row">
+        <div>
+          <div class="setting-label">Grey out completed numbers</div>
+          <div class="setting-desc">Disable keypad buttons once all 6 instances of a number are placed</div>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="toggle-grey-completed" checked />
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div class="setting-row">
+        <div>
+          <div class="setting-label">Dark mode</div>
+          <div class="setting-desc">Switch between light and dark board color schemes</div>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="toggle-dark-mode" />
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- How to Play Modal -->
+  <div class="modal-backdrop" id="help-modal" role="dialog" aria-modal="true" aria-labelledby="help-title">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2 id="help-title">How to Play Mini Sudoku</h2>
+        <button type="button" class="icon-btn" id="btn-close-help" aria-label="Close help">✕</button>
+      </div>
+      <p style="font-size:14px; line-height:1.5; margin-bottom:12px;">
+        Each <strong>row</strong>, <strong>column</strong>, and <strong>2×3 walled region</strong> must contain the numbers <strong>1 through 6</strong> with no repeats.
+      </p>
+      <ul style="font-size:13.5px; line-height:1.55; padding-left:18px; display:flex; flex-direction:column; gap:8px;">
+        <li><strong>Notes Mode (<kbd>N</kbd>):</strong> Toggle handwritten candidate marks inside empty cells. Putting a single correct note in every remaining cell also wins the game!</li>
+        <li><strong>Smart Hints (<kbd>H</kbd>):</strong> Uses a 5-tier deduction engine (Rule Violations, Single Restriction, Naked Single, and Hidden Single) with visual scrim highlighting.</li>
+        <li><strong>Procedural Generator:</strong> Generates brand-new 6×6 puzzles with mirror or rotational symmetry and verifies a unique, human-deducible solution.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Win Celebration Modal -->
+  <div class="modal-backdrop" id="win-modal" role="dialog" aria-modal="true" aria-labelledby="win-title">
+    <div class="modal-card" style="text-align:center;">
+      <div style="font-size:36px; margin-bottom:6px;">🎉</div>
+      <h2 id="win-title" style="font-size:22px; margin-bottom:4px;">Puzzle Solved!</h2>
+      <div id="win-puzzle-name" style="font-size:14px; color:var(--sudoku-muted-text);">#443 Fireplace</div>
+
+      <div class="win-stats-grid">
+        <div class="win-stat-box">
+          <div class="win-stat-value" id="win-stat-time">0:42</div>
+          <div class="win-stat-label">Time</div>
+        </div>
+        <div class="win-stat-box">
+          <div class="win-stat-value" id="win-stat-hints">0</div>
+          <div class="win-stat-label">Hints Used</div>
+        </div>
+        <div class="win-stat-box">
+          <div class="win-stat-value" id="win-stat-badge">Flawless</div>
+          <div class="win-stat-label">Status</div>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn-secondary" id="btn-win-close">View Board</button>
+        <button type="button" class="btn-primary" id="btn-win-next">Next Procedural Level →</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+  <script src="../suite-bridge.js"></script>
+</body>
+</html>

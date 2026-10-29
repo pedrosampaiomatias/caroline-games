@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tango — Clean-Room Edition + Procedural Generator</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app-container">
+    <!-- Top Brand Header -->
+    <header class="game-header">
+      <div class="brand-group">
+        <div class="brand-logo" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="11" cy="11" r="6.5" fill="#ffb31e" stroke="#cb6c2f" stroke-width="1.5" />
+            <path d="M18.5 23.5C22.2 22.8 24.3 19.3 23.1 15.7C25.4 16.2 27.2 18 27.6 20.4C28.2 23.5 26 26.5 22.9 27.1C20.5 27.5 18.2 26.4 17 24.6C17.5 24.6 18 24.6 18.5 23.5Z" fill="#4c8ce6" stroke="#1855aa" stroke-width="1.3" />
+          </svg>
+        </div>
+        <div class="brand-title">
+          <h1>Tango</h1>
+          <p id="brand-subtitle" class="brand-subtitle">
+            Puzzle #751 (Live Capture • 6×6)
+          </p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button
+          id="btn-icon-style"
+          type="button"
+          class="icon-btn"
+          title="Toggle between Classic Sun/Moon and Retro MSFT Clippy/Pointer icons (#179 Easter Egg)"
+        >
+          ☀️ Sun/Moon
+        </button>
+        <button
+          id="btn-dark-mode"
+          type="button"
+          class="icon-btn"
+          title="Toggle Dark / Light Mode"
+          aria-label="Toggle Dark / Light Mode"
+        >
+          🌓
+        </button>
+      </div>
+    </header>
+
+    <!-- Puzzle Selector & Procedural Generator Toolbar -->
+    <section class="toolbar-card" aria-label="Puzzle Controls">
+      <div class="toolbar-row">
+        <div class="select-group">
+          <select id="puzzle-select" class="puzzle-select" aria-label="Select Tango Puzzle or Generator">
+            <optgroup label="Captured Live & Official Presets">
+              <option value="live_751" selected>Puzzle #751 (6×6 • Live Capture)</option>
+              <option value="preset_4x4_tutorial">Warm-Up Tango (4×4 • Official Tutorial)</option>
+            </optgroup>
+            <optgroup label="Procedural Deduction Generator">
+              <option value="gen_6">Procedural 6×6 (Standard)</option>
+              <option value="gen_4">Procedural 4×4 (Mini)</option>
+            </optgroup>
+          </select>
+
+          <button id="btn-generate" type="button" class="btn-generate" title="Generate a new deduction-solvable Tango level">
+            <span>✨ New Level</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Status Bar (Timer, Cell Progress, Auto-Check) -->
+    <section class="status-bar" aria-label="Game Status">
+      <div class="metrics-group">
+        <div class="metric-item">
+          <span class="metric-label">Time</span>
+          <span id="metric-timer" class="metric-value">0:00</span>
+        </div>
+        <div class="metric-item">
+          <span class="metric-label">Filled</span>
+          <span id="metric-progress" class="metric-value">6 / 36</span>
+        </div>
+      </div>
+
+      <label class="auto-check-label">
+        <input id="auto-check-toggle" type="checkbox" checked />
+        <span>Auto-check errors</span>
+      </label>
+    </section>
+
+    <!-- Main Interactive Tango Board Card -->
+    <section class="board-card" aria-label="Tango Puzzle Board">
+      <div class="lotka-board">
+        <div id="lotka-grid" class="lotka-grid" role="grid" aria-label="Tango Grid"></div>
+      </div>
+
+      <!-- Bottom Action Controls -->
+      <div class="controls-row">
+        <button id="btn-undo" type="button" class="control-btn" disabled>
+          <span>↩ Undo</span>
+        </button>
+        <button id="btn-hint" type="button" class="control-btn">
+          <span>💡 Hint</span>
+        </button>
+        <button id="btn-reset" type="button" class="control-btn" disabled>
+          <span>↺ Clear</span>
+        </button>
+      </div>
+
+      <!-- Dynamic Hint Card & Error Cards Stack -->
+      <div id="feedback-stack" class="feedback-stack" aria-live="polite"></div>
+    </section>
+
+    <!-- Official Tango Instructions Card (games-web/components/private/lotka/instructions) -->
+    <section class="rules-card" aria-label="How to play Tango">
+      <div class="rules-title">
+        <span>How to play Tango</span>
+        <span class="metric-label">Left-click • Right-click • Space</span>
+      </div>
+      <ul class="instructions-list">
+        <li>
+          <span class="rule-bullet">•</span>
+          <div>
+            Fill the grid so that each cell contains either a <strong>Sun</strong> (☀️) or a <strong>Moon</strong> (🌙).
+          </div>
+        </li>
+        <li>
+          <span class="rule-bullet">•</span>
+          <div>
+            No more than <strong>2</strong> identical symbols may be next to each other, either vertically or horizontally.
+            <div class="example-pills">
+              <span class="example-pill">☀️ ☀️ ✓</span>
+              <span class="example-pill">☀️ ☀️ ☀️ ✗</span>
+            </div>
+          </div>
+        </li>
+        <li>
+          <span class="rule-bullet">•</span>
+          <div>
+            Each row and column must contain an <strong>equal number</strong> of Suns and Moons (3 of each on a 6×6 grid).
+          </div>
+        </li>
+        <li>
+          <span class="rule-bullet">•</span>
+          <div>
+            Cells separated by an <strong>=</strong> sign must be of the <strong>same</strong> type; cells separated by an <strong>×</strong> sign must be of <strong>opposite</strong> types.
+          </div>
+        </li>
+      </ul>
+    </section>
+  </main>
+
+  <!-- Completion Modal -->
+  <div id="win-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="win-modal-title">
+    <div class="modal-card">
+      <div class="win-badge">🌗</div>
+      <div>
+        <h2 id="win-modal-title">Grid Harmonized!</h2>
+        <p class="brand-subtitle">All Tango rules satisfied with zero conflicts.</p>
+      </div>
+
+      <div class="modal-stats">
+        <div>
+          <div id="win-stat-time" class="modal-stat-val">0:00</div>
+          <div class="modal-stat-lbl">Time</div>
+        </div>
+        <div>
+          <div id="win-stat-moves" class="modal-stat-val">0</div>
+          <div class="modal-stat-lbl">Moves</div>
+        </div>
+        <div>
+          <div id="win-stat-grid" class="modal-stat-val">6×6</div>
+          <div class="modal-stat-lbl">Grid</div>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button id="btn-modal-close" type="button" class="modal-btn">View Board</button>
+        <button id="btn-modal-next" type="button" class="modal-btn is-primary">✨ Next Level</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+  <script src="../suite-bridge.js"></script>
+</body>
+</html>

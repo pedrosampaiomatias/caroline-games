@@ -1,0 +1,643 @@
+/* ==========================================================================
+   LinkedIn Patches — Clean-Room Stylesheet
+   Reconstructed from REA CDP inspection of live Puzzle #225 & C7ZU1-qQ.js
+   ========================================================================== */
+
+:root {
+  --bg-page: #f4f2ee;
+  --bg-card: #ffffff;
+  --bg-elevated: #f8fafc;
+  --text-primary: rgba(0, 0, 0, 0.9);
+  --text-secondary: rgba(0, 0, 0, 0.62);
+  --border-subtle: rgba(0, 0, 0, 0.12);
+  --grid-hairline: rgba(0, 0, 0, 0.14);
+  --board-border: rgba(0, 0, 0, 0.85);
+  --accent-primary: #0a66c2;
+  --accent-hover: #004182;
+  --error-red: #cb112d;
+  --error-bg: rgba(203, 17, 45, 0.09);
+  --shadow-card: 0 4px 16px rgba(0, 0, 0, 0.07);
+}
+
+body.theme-dark {
+  --bg-page: #1b1f23;
+  --bg-card: #24292e;
+  --bg-elevated: #2d333b;
+  --text-primary: rgba(255, 255, 255, 0.92);
+  --text-secondary: rgba(255, 255, 255, 0.64);
+  --border-subtle: rgba(255, 255, 255, 0.14);
+  --grid-hairline: rgba(255, 255, 255, 0.14);
+  --board-border: rgba(255, 255, 255, 0.82);
+  --accent-primary: #70b5f9;
+  --accent-hover: #a8d4ff;
+  --error-red: #f85149;
+  --error-bg: rgba(248, 81, 73, 0.15);
+  --shadow-card: 0 6px 24px rgba(0, 0, 0, 0.35);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--bg-page);
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.25rem 1rem 2.5rem;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.app-container {
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+/* Header */
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--bg-card);
+  padding: 0.85rem 1.1rem;
+  border-radius: 12px;
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-card);
+}
+
+.brand-group {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.brand-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: var(--bg-elevated);
+  border: 1.5px solid var(--board-border);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 2px;
+  padding: 4px;
+}
+
+.brand-icon span:nth-child(1) {
+  background: #00afff;
+  border-radius: 2px;
+}
+.brand-icon span:nth-child(2) {
+  background: #ef6c00;
+  border-radius: 2px;
+}
+.brand-icon span:nth-child(3) {
+  background: #00a651;
+  border-radius: 2px;
+}
+.brand-icon span:nth-child(4) {
+  background: #7c4dff;
+  border-radius: 2px;
+}
+
+.brand-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: baseline;
+  gap: 0.45rem;
+}
+
+.edition-badge {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: var(--bg-elevated);
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid var(--border-subtle);
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.timer-pill {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 8px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+}
+
+.icon-btn {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.icon-btn:hover {
+  background: var(--border-subtle);
+}
+
+/* Toolbar & Generator Controls */
+.toolbar-card {
+  background: var(--bg-card);
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.toolbar-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.puzzle-select {
+  flex: 1;
+  min-width: 195px;
+  padding: 0.45rem 0.65rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.45rem 0.85rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  transition: all 0.15s ease;
+}
+
+.btn:hover:not(:disabled) {
+  background: var(--border-subtle);
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: var(--accent-primary);
+  color: #ffffff;
+  border-color: transparent;
+}
+
+body.theme-dark .btn-primary {
+  color: #111111;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--accent-hover);
+}
+
+/* ==========================================================================
+   Patches Game Board, Clue Shapes & Drawn Region Overlays
+   ========================================================================== */
+
+.board-card {
+  background: var(--bg-card);
+  padding: 1.05rem;
+  border-radius: 12px;
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.patches-board-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 410px;
+  aspect-ratio: var(--grid-cols, 6) / var(--grid-rows, 6);
+  margin: 0 auto;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+}
+
+.patches-grid {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(var(--grid-cols, 6), 1fr);
+  grid-template-rows: repeat(var(--grid-rows, 6), 1fr);
+  border: 2.5px solid var(--board-border);
+  border-radius: 10px;
+  background-color: var(--bg-card);
+  overflow: hidden;
+}
+
+.patches-cell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px dashed var(--grid-hairline);
+  border-bottom: 1px dashed var(--grid-hairline);
+  cursor: pointer;
+  z-index: 1;
+}
+
+.patches-cell.is-last-col {
+  border-right: none;
+}
+
+.patches-cell.is-last-row {
+  border-bottom: none;
+}
+
+.patches-cell:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 3px var(--accent-primary);
+  z-index: 6;
+}
+
+/* Clue Shape Indicators (Square, Wide Rect, Tall Rect, Freeform Cross) */
+.clue-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.clue-shape {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  background-color: var(--clue-color, #00afff);
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 0.92rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.22);
+}
+
+/* 1. Square Clue */
+.clue-shape--square {
+  width: 58%;
+  height: 58%;
+}
+
+/* 2. Horizontal Wide Rectangle Clue */
+.clue-shape--horiz {
+  width: 76%;
+  height: 44%;
+}
+
+/* 3. Vertical Tall Rectangle Clue */
+.clue-shape--vert {
+  width: 44%;
+  height: 76%;
+}
+
+/* 4. Freeform (UNKNOWN) Clue — Overlapping Horizontal + Vertical Cross */
+.clue-freeform-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.clue-freeform-bar {
+  position: absolute;
+  border-radius: 4px;
+  background-color: var(--clue-fill, rgba(0, 175, 255, 0.42));
+  border: 1.5px solid var(--clue-color, #00afff);
+}
+
+.clue-freeform-bar--horiz {
+  width: 74%;
+  height: 40%;
+}
+
+.clue-freeform-bar--vert {
+  width: 40%;
+  height: 74%;
+}
+
+.clue-number {
+  position: relative;
+  z-index: 2;
+  font-weight: 800;
+  font-size: 0.92rem;
+  line-height: 1;
+  color: #ffffff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.38);
+}
+
+.clue-freeform-wrapper .clue-number {
+  color: var(--text-primary);
+  text-shadow: 0 0 4px var(--bg-card);
+}
+
+/* Drawn Region Overlays Layer */
+.regions-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.region-overlay {
+  position: absolute;
+  border-radius: 7px;
+  border: 2.5px solid var(--region-color, #00afff);
+  background-color: var(--region-fill, rgba(0, 175, 255, 0.34));
+  transition: top 0.08s ease, left 0.08s ease, width 0.08s ease, height 0.08s ease,
+    transform 0.25s ease, background-color 0.2s ease;
+  overflow: hidden;
+}
+
+.region-overlay--drawing {
+  border-style: solid;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.16);
+  z-index: 5;
+}
+
+.region-overlay--error {
+  border-color: var(--error-red) !important;
+  background: repeating-linear-gradient(
+    -45deg,
+    rgba(203, 17, 45, 0.14),
+    rgba(203, 17, 45, 0.14) 7px,
+    rgba(203, 17, 45, 0.32) 7px,
+    rgba(203, 17, 45, 0.32) 11px
+  ) !important;
+}
+
+.region-overlay--solved {
+  animation: region-pop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes region-pop {
+  0% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(1.03);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Region Size Pill Badge (shown while dragging or inside drawn regions) */
+.region-size-badge {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.72);
+  color: #ffffff;
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding: 0.12rem 0.42rem;
+  border-radius: 999px;
+  pointer-events: none;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+  white-space: nowrap;
+}
+
+/* Hint Highlight Overlay */
+.hint-outline-box {
+  position: absolute;
+  border-radius: 7px;
+  border: 3px dashed var(--accent-primary);
+  background-color: rgba(10, 102, 194, 0.12);
+  pointer-events: none;
+  z-index: 4;
+  animation: pulse-outline 1.2s infinite ease-in-out;
+}
+
+@keyframes pulse-outline {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
+/* Under-board Controls */
+.under-board-controls {
+  display: flex;
+  width: 100%;
+  max-width: 410px;
+  gap: 0.6rem;
+  justify-content: space-between;
+}
+
+.under-board-controls .btn {
+  flex: 1;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.9rem;
+}
+
+/* Cards (Hint, Error, Instructions) */
+.patches-card {
+  width: 100%;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  padding: 0.95rem 1.15rem;
+  box-shadow: var(--shadow-card);
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.patches-card.hidden {
+  display: none;
+}
+
+.patches-error-card {
+  border-color: var(--error-red);
+  background: var(--error-bg);
+  color: var(--error-red);
+  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.hint-card {
+  border-color: var(--accent-primary);
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.hint-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 700;
+  color: var(--accent-primary);
+}
+
+.hint-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+/* Visual Legend in How to Play Card (Reconstructed from rv in C7ZU1-qQ.js) */
+.legend-title {
+  font-weight: 700;
+  font-size: 0.94rem;
+  margin-bottom: 0.65rem;
+}
+
+.legend-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.65rem;
+  margin-bottom: 0.7rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: var(--bg-elevated);
+  padding: 0.45rem 0.6rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-subtle);
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.legend-icon-box {
+  position: relative;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.legend-shape {
+  background: #00afff;
+  border-radius: 3px;
+}
+
+.legend-shape--square {
+  width: 18px;
+  height: 18px;
+}
+
+.legend-shape--tall {
+  width: 12px;
+  height: 22px;
+  background: #00a651;
+}
+
+.legend-shape--wide {
+  width: 22px;
+  height: 12px;
+  background: #ef6c00;
+}
+
+.legend-freeform-h,
+.legend-freeform-v {
+  position: absolute;
+  background: rgba(124, 77, 255, 0.42);
+  border: 1.5px solid #7c4dff;
+  border-radius: 3px;
+}
+
+.legend-freeform-h {
+  width: 22px;
+  height: 11px;
+}
+
+.legend-freeform-v {
+  width: 11px;
+  height: 22px;
+}
+
+.legend-note {
+  font-size: 0.83rem;
+  color: var(--text-secondary);
+}
+
+/* Win Banner */
+.win-banner {
+  width: 100%;
+  background: linear-gradient(135deg, rgba(0, 166, 81, 0.16), rgba(0, 175, 255, 0.18));
+  border: 2px solid #00a651;
+  border-radius: 12px;
+  padding: 1rem 1.15rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  box-shadow: var(--shadow-card);
+}
+
+.win-banner.hidden {
+  display: none;
+}
+
+.win-info h2 {
+  font-size: 1.08rem;
+  font-weight: 700;
+  margin-bottom: 0.15rem;
+}
+
+.win-info p {
+  font-size: 0.84rem;
+  color: var(--text-secondary);
+}

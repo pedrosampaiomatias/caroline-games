@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wend — Clean-Room Rebuild (Português PT-BR & Live #142)</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="brand-group">
+        <div class="brand-icon" aria-hidden="true">W</div>
+        <h1 class="brand-title">
+          Wend
+          <span id="edition-badge" class="edition-badge">#142-PT</span>
+        </h1>
+      </div>
+
+      <div class="header-right">
+        <div class="lang-toggle" role="group" aria-label="Idioma das Palavras">
+          <button id="btn-lang-pt" class="lang-btn active" type="button" title="Palavras em Português">
+            🇧🇷 PT
+          </button>
+          <button id="btn-lang-en" class="lang-btn" type="button" title="Words in English">
+            🇺🇸 EN
+          </button>
+        </div>
+        <div id="timer-display" class="timer-pill" aria-label="Tempo decorrido">0:00</div>
+        <button id="btn-theme" class="icon-btn" type="button" title="Alternar Tema Claro/Escuro" aria-label="Alternar Tema">
+          🌓
+        </button>
+      </div>
+    </header>
+
+    <!-- Puzzle Selector & Procedural Generator Bar -->
+    <section class="toolbar-card" aria-label="Controles de Jogo">
+      <div class="toolbar-row">
+        <select id="puzzle-select" class="puzzle-select" aria-label="Selecionar Tabuleiro">
+          <option value="pt-201">Português #201 (5×5 Labirinto — 4 paredes internas)</option>
+          <option value="pt-202">Português #202 (6×6 Labirinto — 6 paredes internas)</option>
+          <option value="pt-142">Português #142 (5×5 Octógono — 3×7 letras)</option>
+          <option value="live-142-en">Live Capture #142 (5×5 EN Daily — AVOCADO/EXPENSE/FREIGHT)</option>
+          <option value="gen-4x4">Procedural 4×4 Labirinto (Com Obstáculos)</option>
+          <option value="gen-5x5-full">Procedural 5×5 Labirinto (Com Obstáculos)</option>
+          <option value="gen-5x5-octagon">Procedural 5×5 Octógono (21 letras)</option>
+          <option value="gen-6x6-octagon">Procedural 6×6 Labirinto (Com Obstáculos)</option>
+        </select>
+        <button id="btn-new-random" class="btn btn-primary" type="button">
+          🎲 Novo Jogo
+        </button>
+      </div>
+    </section>
+
+    <!-- Win Banner -->
+    <section id="win-banner" class="win-banner hidden" aria-live="polite">
+      <div class="win-info">
+        <h2 id="win-title">🎉 Wend Resolvido!</h2>
+        <p id="win-stats"></p>
+        <div id="win-word-pills" class="words-found-pills"></div>
+      </div>
+      <button id="btn-win-next" class="btn btn-primary" type="button">
+        Próximo →
+      </button>
+    </section>
+
+    <!-- Goal Instructions Banner (nv in C7ZU1-qQ.js) -->
+    <section id="goal-banner" class="goal-banner" aria-label="Objetivo do Jogo"></section>
+
+    <!-- Main Game Board Card -->
+    <section class="board-card">
+      <div id="wend-board-wrapper" class="wend-board-wrapper">
+        <div id="wend-grid" class="wend-grid" role="grid" aria-label="Tabuleiro Wend"></div>
+      </div>
+
+      <!-- Current Word Display / Hint / Status Message (a6 & a8 in C7ZU1-qQ.js) -->
+      <div id="wend-status-bar" class="wend-status-bar" role="status" aria-live="polite"></div>
+
+      <!-- Word List Slots (ni in C7ZU1-qQ.js) -->
+      <div id="wend-word-list" class="wend-word-list" aria-label="Lista de Palavras"></div>
+
+      <!-- Under-Board Action Buttons -->
+      <div class="under-board-controls">
+        <button id="btn-undo" class="btn" type="button" disabled>
+          ↩ Desfazer
+        </button>
+        <button id="btn-hint" class="btn" type="button">
+          💡 Dica
+        </button>
+        <button id="btn-clear" class="btn" type="button" disabled>
+          🗑 Limpar
+        </button>
+      </div>
+    </section>
+
+    <!-- How to Play Card -->
+    <section class="info-card" aria-label="Como Jogar">
+      <p id="how-to-play-text">
+        Arraste entre letras adjacentes (horizontal ou vertical) para formar as palavras ocultas. A primeira letra de cada palavra ganha um círculo inicial. Clique na primeira letra para apagar a palavra, clique no meio para encurtá-la, ou arraste até o início/fim de outra palavra para uni-las!
+      </p>
+    </section>
+  </main>
+
+  <script src="game.js"></script>
+  <script src="../suite-bridge.js"></script>
+</body>
+</html>

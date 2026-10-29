@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zip — Clean-Room Edition + Procedural Generator</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="color-theme-2">
+  <main id="app-container" class="app-container">
+    <!-- Top Brand Header -->
+    <header class="game-header">
+      <div class="brand-group">
+        <div class="brand-logo" aria-hidden="true">Z</div>
+        <div class="brand-title">
+          <h1>Zip</h1>
+          <p id="brand-subtitle" class="brand-subtitle">
+            Puzzle #590 (Live Capture • 7×7)
+          </p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button
+          id="btn-dark-mode"
+          type="button"
+          class="icon-btn"
+          title="Toggle Dark / Light Mode"
+          aria-label="Toggle Dark / Light Mode"
+        >
+          🌓
+        </button>
+      </div>
+    </header>
+
+    <!-- Puzzle Selector & Color Theme Toolbar -->
+    <section class="toolbar-card" aria-label="Puzzle & Theme Controls">
+      <div class="toolbar-row">
+        <div class="select-group">
+          <select id="puzzle-select" class="puzzle-select" aria-label="Select Puzzle or Generator Size">
+            <optgroup label="Captured Live & Official Presets">
+              <option value="live_590" selected>Puzzle #590 (7×7 • Live Capture)</option>
+              <option value="preset_6x6_walls">Classic Labyrinth (6×6 • 12 Walls)</option>
+              <option value="preset_6x6_open">Open Meadow (6×6 • Wall-Free)</option>
+              <option value="preset_4x4_tutorial">Warm-Up Mini (4×4 • With Wall Hints)</option>
+            </optgroup>
+            <optgroup label="Procedural Hamiltonian Generator">
+              <option value="gen_5">Procedural 5×5 (Easy)</option>
+              <option value="gen_6">Procedural 6×6 (Medium)</option>
+              <option value="gen_7">Procedural 7×7 (Hard)</option>
+            </optgroup>
+          </select>
+
+          <button id="btn-generate" type="button" class="btn-generate" title="Generate a brand-new procedural Zip puzzle">
+            <span>✨ New Level</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="toolbar-row">
+        <span class="metric-label">Trail Color Theme</span>
+        <div id="theme-swatches" class="theme-swatches" aria-label="Trail Color Themes"></div>
+      </div>
+    </section>
+
+    <!-- Status Bar (Timer, Backtracks, Cell & Checkpoint Progress) -->
+    <section class="status-bar" aria-label="Game Status">
+      <div class="metrics-group">
+        <div class="metric-item">
+          <span class="metric-label">Time</span>
+          <span id="metric-timer" class="metric-value">0:00</span>
+        </div>
+        <div class="metric-item">
+          <span class="metric-label">Backtracks</span>
+          <span id="metric-backtracks" class="metric-value">0</span>
+        </div>
+      </div>
+
+      <div id="progress-pill" class="progress-pill">
+        1 / 49 cells • 1/12 dots
+      </div>
+    </section>
+
+    <!-- Main Interactive Zip Board Card -->
+    <section class="board-card" aria-label="Zip Puzzle Board">
+      <div id="message-banner" class="message-banner is-neutral" role="status" aria-live="polite">
+        Drag or click from dot 1 to connect the numbers in order and fill every cell.
+      </div>
+
+      <div id="trail-board-wrapper" class="trail-board-wrapper">
+        <div id="trail-board" class="trail-board">
+          <!-- Continuous Gradient SVG Trail -->
+          <svg
+            id="trail-svg-layer"
+            class="trail-svg-layer"
+            xmlns="http://www.w3.org/2000/svg"
+            preserveAspectRatio="none"
+          ></svg>
+
+          <!-- Interactive Grid Cells + Numbered Dots + Walls -->
+          <div id="trail-grid" class="trail-grid" role="grid" aria-label="Zip Grid"></div>
+        </div>
+      </div>
+
+      <!-- Bottom Action Controls -->
+      <div class="controls-row">
+        <button id="btn-undo" type="button" class="control-btn" disabled>
+          <span>↩ Undo</span>
+        </button>
+        <button id="btn-hint" type="button" class="control-btn btn-hint">
+          <span>💡 Hint</span>
+        </button>
+        <button id="btn-reset" type="button" class="control-btn" disabled>
+          <span>↺ Reset</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Official Zip Rules Summary -->
+    <section class="rules-card" aria-label="How to play Zip">
+      <div class="rules-title">
+        <span>How to play Zip</span>
+        <span class="metric-label">Mouse • Touch • Arrow Keys</span>
+      </div>
+      <div class="rules-grid">
+        <div class="rule-item">
+          <div class="rule-icon">1→2</div>
+          <div>
+            <strong>Connect the dots in order</strong><br />
+            Start at <strong>1</strong> and visit each numbered checkpoint sequentially, ending on the final number.
+          </div>
+        </div>
+        <div class="rule-item">
+          <div class="rule-icon">▦</div>
+          <div>
+            <strong>Fill every single cell</strong><br />
+            Your continuous trail must pass through every cell on the grid without crossing itself or passing through walls.
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Completion Modal -->
+  <div id="win-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="win-modal-title">
+    <div class="modal-card">
+      <div class="win-badge">✓</div>
+      <div>
+        <h2 id="win-modal-title">Zip Solved!</h2>
+        <p class="brand-subtitle">Every cell visited &amp; all checkpoints connected in order.</p>
+      </div>
+
+      <div class="modal-stats">
+        <div>
+          <div id="win-stat-time" class="modal-stat-val">0:00</div>
+          <div class="modal-stat-lbl">Time</div>
+        </div>
+        <div>
+          <div id="win-stat-backtracks" class="modal-stat-val">0</div>
+          <div class="modal-stat-lbl">Backtracks</div>
+        </div>
+        <div>
+          <div id="win-stat-grid" class="modal-stat-val">7×7</div>
+          <div class="modal-stat-lbl">Grid</div>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button id="btn-modal-close" type="button" class="modal-btn">View Board</button>
+        <button id="btn-modal-next" type="button" class="modal-btn is-primary">✨ Next Level</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+  <script src="../suite-bridge.js"></script>
+</body>
+</html>

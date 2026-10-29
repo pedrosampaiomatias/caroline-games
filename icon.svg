@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#7c3aed"/>
+      <stop offset="100%" stop-color="#db2777"/>
+    </linearGradient>
+    <filter id="tileShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000000" flood-opacity="0.22"/>
+    </filter>
+  </defs>
+
+  <!-- Rounded App Icon Background -->
+  <rect width="512" height="512" rx="116" fill="url(#bgGrad)"/>
+
+  <!-- 4 Colorful Puzzle Quadrants -->
+  <rect x="64" y="64" width="176" height="176" rx="42" fill="#fbbf24" filter="url(#tileShadow)"/>
+  <rect x="272" y="64" width="176" height="176" rx="42" fill="#f472b6" filter="url(#tileShadow)"/>
+  <rect x="64" y="272" width="176" height="176" rx="42" fill="#38bdf8" filter="url(#tileShadow)"/>
+  <rect x="272" y="272" width="176" height="176" rx="42" fill="#a78bfa" filter="url(#tileShadow)"/>
+
+  <!-- Center Badge with "CG" -->
+  <circle cx="256" cy="256" r="118" fill="#ffffff" filter="url(#tileShadow)"/>
+  <text
+    x="256"
+    y="296"
+    text-anchor="middle"
+    font-family="system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif"
+    font-size="116"
+    font-weight="900"
+    letter-spacing="-4"
+    fill="#7c3aed"
+  >CG</text>
+</svg>

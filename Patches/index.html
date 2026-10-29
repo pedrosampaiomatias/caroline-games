@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Patches — Clean-Room Rebuild (#225 + Procedural Generator)</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app-container">
+    <!-- Top Header -->
+    <header class="app-header">
+      <div class="brand-group">
+        <div class="brand-icon" aria-hidden="true">
+          <span></span><span></span><span></span><span></span>
+        </div>
+        <h1 class="brand-title">
+          Patches
+          <span id="edition-badge" class="edition-badge">#225</span>
+        </h1>
+      </div>
+      <div class="header-right">
+        <div id="timer-display" class="timer-pill" aria-label="Elapsed time">0:00</div>
+        <button id="btn-theme" class="icon-btn" title="Toggle Dark/Light Theme" aria-label="Toggle Dark/Light Theme">
+          🌓
+        </button>
+      </div>
+    </header>
+
+    <!-- Puzzle Selector & Procedural Generator Bar -->
+    <section class="toolbar-card" aria-label="Puzzle Controls">
+      <div class="toolbar-row">
+        <select id="puzzle-select" class="puzzle-select" aria-label="Select Puzzle or Grid Size">
+          <option value="live-225">Live Capture #225 (6×6 Daily)</option>
+          <option value="preset-5x5">Classic #198 (5×5 Preset)</option>
+          <option value="gen-5">Procedural 5×5 (Random)</option>
+          <option value="gen-6">Procedural 6×6 (Random)</option>
+          <option value="gen-7">Procedural 7×7 (Random)</option>
+          <option value="gen-8">Procedural 8×8 (Random)</option>
+        </select>
+        <button id="btn-new-random" class="btn btn-primary" type="button">
+          🎲 New Random
+        </button>
+      </div>
+    </section>
+
+    <!-- Win Banner -->
+    <section id="win-banner" class="win-banner hidden" aria-live="polite">
+      <div class="win-info">
+        <h2>🎉 Puzzle Solved!</h2>
+        <p id="win-stats">Completed in 0:00</p>
+      </div>
+      <button id="btn-win-next" class="btn btn-primary" type="button">
+        Next Puzzle →
+      </button>
+    </section>
+
+    <!-- Main Game Board Card -->
+    <section class="board-card">
+      <div id="patches-board-wrapper" class="patches-board-wrapper">
+        <div id="patches-grid" class="patches-grid" role="grid" aria-label="Patches Board"></div>
+        <div id="regions-layer" class="regions-layer" aria-hidden="true"></div>
+      </div>
+
+      <!-- Under-Board Action Buttons -->
+      <div class="under-board-controls">
+        <button id="btn-undo" class="btn" type="button" disabled>
+          ↩ Undo
+        </button>
+        <button id="btn-hint" class="btn" type="button">
+          💡 Hint
+        </button>
+        <button id="btn-clear" class="btn" type="button" disabled>
+          🗑 Clear
+        </button>
+      </div>
+    </section>
+
+    <!-- Error Card -->
+    <section id="error-card" class="patches-card patches-error-card hidden" role="alert">
+      <div id="error-text"></div>
+    </section>
+
+    <!-- Hint Card -->
+    <section id="hint-card" class="patches-card hint-card hidden" aria-live="polite">
+      <div class="hint-header">
+        <span id="hint-title">Hint</span>
+      </div>
+      <p id="hint-message"></p>
+      <div class="hint-actions">
+        <button id="btn-dismiss-hint" class="btn" type="button">Dismiss</button>
+        <button id="btn-apply-hint" class="btn btn-primary" type="button">Apply Hint</button>
+      </div>
+    </section>
+
+    <!-- How to Play & Shape Legend Card (Reconstructed from rv in C7ZU1-qQ.js) -->
+    <section class="patches-card" aria-label="How to Play">
+      <div class="legend-title">How to Play Patches</div>
+      <div class="legend-grid">
+        <div class="legend-item">
+          <div class="legend-icon-box">
+            <div class="legend-shape legend-shape--square"></div>
+          </div>
+          <span>Square</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-icon-box">
+            <div class="legend-shape legend-shape--tall"></div>
+          </div>
+          <span>Tall rectangle</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-icon-box">
+            <div class="legend-shape legend-shape--wide"></div>
+          </div>
+          <span>Wide rectangle</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-icon-box">
+            <div class="legend-freeform-h"></div>
+            <div class="legend-freeform-v"></div>
+          </div>
+          <span>Any of the above</span>
+        </div>
+      </div>
+      <p class="legend-note">
+        Drag across cells to divide the grid into rectangular patches. Each patch must contain <strong>one clue</strong>, match its <strong>shape</strong> (square, tall rectangle, wide rectangle, or any of the above), and match its <strong>number of cells</strong> (if numbered). Click an existing patch to erase it, or drag from inside a patch to resize it.
+      </p>
+    </section>
+  </main>
+
+  <script src="game.js"></script>
+  <script src="../suite-bridge.js"></script>
+</body>
+</html>
