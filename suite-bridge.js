@@ -402,6 +402,51 @@
      7. Attach Listeners & Polling Loop on DOMContentLoaded
      ------------------------------------------------------------------------ */
   window.addEventListener("DOMContentLoaded", () => {
+    // In-iframe mobile optimizations
+    if (window.parent && window.parent !== window) {
+      document.documentElement.classList.add("in-suite-iframe");
+      const iframeStyle = document.createElement("style");
+      iframeStyle.id = "suite-iframe-responsive-style";
+      iframeStyle.textContent = `
+        html, body {
+          max-width: 100vw !important;
+          overflow-x: hidden !important;
+        }
+        .in-suite-iframe body {
+          padding: 8px 10px 32px !important;
+        }
+        .in-suite-iframe .app-container,
+        .in-suite-iframe .app-shell {
+          max-width: 100% !important;
+          width: 100% !important;
+        }
+        .in-suite-iframe #btn-dark-mode,
+        .in-suite-iframe #btn-theme,
+        .in-suite-iframe #btn-theme-toggle {
+          display: none !important;
+        }
+        @media (max-width: 640px) {
+          .in-suite-iframe .brand-subtitle,
+          .in-suite-iframe .game-subtitle,
+          .in-suite-iframe .goal-banner {
+            display: none !important;
+          }
+          .in-suite-iframe .game-header,
+          .in-suite-iframe .app-header {
+            padding: 8px 12px !important;
+            margin-bottom: 6px !important;
+          }
+          .in-suite-iframe .toolbar-card {
+            padding: 8px 10px !important;
+          }
+          .in-suite-iframe .board-card {
+            padding: 10px 4px !important;
+          }
+        }
+      `;
+      document.head.appendChild(iframeStyle);
+    }
+
     // Sync initial theme from Suite localStorage
     const savedSuiteTheme = localStorage.getItem("li_suite_theme");
     if (savedSuiteTheme === "dark" || savedSuiteTheme === "light") {

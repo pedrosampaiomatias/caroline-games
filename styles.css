@@ -55,6 +55,8 @@
 html,
 body {
   height: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   background-color: var(--bg-page);
   color: var(--text-primary);
@@ -840,13 +842,17 @@ body.player-active {
 
 .player-view {
   position: relative;
-  width: 100%;
+  width: 100vw;
+  max-width: 100%;
   height: calc(100vh - var(--topbar-height));
+  height: calc(100dvh - var(--topbar-height));
   background: var(--bg-page);
+  overflow: hidden;
 }
 
 body.gauntlet-active .player-view {
   height: calc(100vh - var(--topbar-height) - var(--gauntlet-bar-height));
+  height: calc(100dvh - var(--topbar-height) - var(--gauntlet-bar-height));
 }
 
 .iframe-deck {
@@ -856,8 +862,8 @@ body.gauntlet-active .player-view {
 }
 
 .game-iframe {
-  width: 100%;
-  height: 100%;
+  width: 100% !important;
+  height: 100% !important;
   border: none;
   display: none;
   background: var(--bg-page);
@@ -945,6 +951,7 @@ body.gauntlet-active .player-view {
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 .code-box {
@@ -1040,30 +1047,86 @@ body.gauntlet-active .player-view {
 }
 
 @media (max-width: 760px) {
+  .suite-topbar {
+    padding: 0 10px;
+    height: 52px;
+    min-height: 52px;
+    gap: 8px;
+  }
+  .suite-logo {
+    width: 32px;
+    height: 32px;
+    border-radius: 9px;
+  }
+  .suite-logo svg {
+    width: 20px;
+    height: 20px;
+  }
+  .suite-brand-title {
+    font-size: 15px;
+  }
   .suite-brand-subtitle {
     display: none;
   }
-  .games-grid {
-    grid-template-columns: 1fr;
+
+  /* When playing a game on mobile, simplify the topbar completely */
+  body.player-active .suite-brand-btn {
+    display: none;
   }
-  .profile-metrics {
-    gap: 14px;
+  body.player-active .topbar-switcher {
+    display: none;
   }
+  body.player-active #btn-open-profile,
+  body.player-active #btn-install-app,
+  body.player-active #btn-reload-game,
+  body.player-active #btn-open-standalone {
+    display: none !important;
+  }
+  body.player-active .btn-back-hub {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  /* Compact Challenge Code pill on mobile */
+  #btn-challenge-code {
+    padding: 5px 9px;
+    font-size: 11px;
+    max-width: 140px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   .topbar-right {
     gap: 5px;
   }
-  .topbar-action-btn span {
-    display: inline-block;
+  .icon-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
+
+  .hub-view {
+    padding: 16px 14px 48px;
+  }
+  .games-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .profile-metrics {
+    gap: 12px;
   }
   .suite-modal {
-    padding: 18px;
-    max-height: 85vh;
+    padding: 16px;
+    max-height: 88vh;
   }
 }
 
-@media (max-width: 520px) {
-  .suite-brand-title {
-    font-size: 15px;
+@media (max-width: 480px) {
+  #btn-install-app,
+  #btn-open-standalone,
+  #btn-reload-game {
+    display: none !important;
   }
   .hub-hero-actions {
     width: 100%;

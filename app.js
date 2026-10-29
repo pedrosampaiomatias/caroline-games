@@ -674,17 +674,20 @@ class LinkedInGamesSuiteApp {
   }
 
   updateTopbarChallengeLabel() {
+    const isMobile = window.innerWidth <= 640;
     if (this.gauntlet) {
-      this.challengeBtnLabel.textContent = `🔗 GAUNTLET-${this.gauntlet.seed}`;
+      this.challengeBtnLabel.textContent = isMobile
+        ? `🔗 Gauntlet`
+        : `🔗 GAUNTLET-${this.gauntlet.seed}`;
     } else if (
       this.activeGameId &&
       this.activeChallengeCodes.has(this.activeGameId)
     ) {
-      this.challengeBtnLabel.textContent = `🔗 ${this.activeChallengeCodes.get(
-        this.activeGameId
-      )}`;
+      this.challengeBtnLabel.textContent = isMobile
+        ? `🔗 Code`
+        : `🔗 ${this.activeChallengeCodes.get(this.activeGameId)}`;
     } else {
-      this.challengeBtnLabel.textContent = "🔗 Challenge Code";
+      this.challengeBtnLabel.textContent = isMobile ? "🔗 Code" : "🔗 Challenge Code";
     }
   }
 

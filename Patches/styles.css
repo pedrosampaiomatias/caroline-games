@@ -184,7 +184,8 @@ body {
 
 .puzzle-select {
   flex: 1;
-  min-width: 195px;
+  min-width: 0;
+  width: 100%;
   padding: 0.45rem 0.65rem;
   border-radius: 8px;
   border: 1px solid var(--border-subtle);
