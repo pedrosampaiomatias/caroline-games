@@ -502,6 +502,7 @@ class LinkedInGamesSuiteApp {
     this.readyGames = new Set();
     this.pendingSeedCommands = new Map(); // gameId -> { mode, seed, lang }
     this.activeChallengeCodes = new Map(); // gameId -> code string
+    this.dailySeededGames = new Set(); // gameId set of games seeded with today's date
 
     this.theme = localStorage.getItem("li_suite_theme") || "light";
     this.audio = new SuiteAudioEngine();
@@ -675,6 +676,7 @@ class LinkedInGamesSuiteApp {
 
   updateTopbarChallengeLabel() {
     const isMobile = window.innerWidth <= 640;
+    const todaySeed = getTodayCompactSeed();
     if (this.gauntlet) {
       this.challengeBtnLabel.textContent = isMobile
         ? `🔗 Gauntlet`
@@ -683,9 +685,13 @@ class LinkedInGamesSuiteApp {
       this.activeGameId &&
       this.activeChallengeCodes.has(this.activeGameId)
     ) {
-      this.challengeBtnLabel.textContent = isMobile
-        ? `🔗 Code`
-        : `🔗 ${this.activeChallengeCodes.get(this.activeGameId)}`;
+      const code = this.activeChallengeCodes.get(this.activeGameId);
+      const isDaily = code && code.endsWith(`-${todaySeed}`);
+      if (isDaily) {
+        this.challengeBtnLabel.textContent = isMobile ? `📅 Daily` : `📅 Daily • ${todaySeed}`;
+      } else {
+        this.challengeBtnLabel.textContent = isMobile ? `🔗 Code` : `🔗 ${code}`;
+      }
     } else {
       this.challengeBtnLabel.textContent = isMobile ? "🔗 Code" : "🔗 Challenge Code";
     }
@@ -1035,6 +1041,16 @@ class LinkedInGamesSuiteApp {
       iframeEl.classList.toggle("active", id === game.id);
     }
 
+    if (!options.fromGauntlet && !this.pendingSeedCommands.has(game.id) && !this.dailySeededGames.has(game.id)) {
+      this.dailySeededGames.add(game.id);
+      this.sendSeedToChild(game.id, {
+        mode: game.defaultProceduralMode,
+        seed: getTodayCompactSeed(),
+        lang: "pt",
+        isDaily: true,
+      });
+    }
+
     this.updateSwitcherState();
     this.updateTopbarChallengeLabel();
 
@@ -1297,10 +1313,19 @@ class LinkedInGamesSuiteApp {
             "*"
           );
         }
-        // Flush any queued seed command for this game
+        // Flush any queued seed command for this game, or seed with today's date if first run
         if (this.pendingSeedCommands.has(gameId)) {
           const cmd = this.pendingSeedCommands.get(gameId);
           this.sendSeedToChild(gameId, cmd);
+        } else if (!this.dailySeededGames.has(gameId)) {
+          this.dailySeededGames.add(gameId);
+          const game = GAMES_CATALOG.find((g) => g.id === gameId);
+          this.sendSeedToChild(gameId, {
+            mode: game ? game.defaultProceduralMode : undefined,
+            seed: getTodayCompactSeed(),
+            lang: "pt",
+            isDaily: true,
+          });
         }
         this.updateTopbarChallengeLabel();
       } else if (type === "SUITE_PUZZLE_LOADED") {

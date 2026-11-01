@@ -695,10 +695,7 @@ body.theme-dark .wend-start-outer {
 }
 
 .words-found-pills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem;
-  margin-top: 0.35rem;
+  display: none !important;
 }
 
 .word-pill {

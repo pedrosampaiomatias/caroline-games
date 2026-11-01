@@ -100,6 +100,7 @@ body {
 .app-shell {
   width: 100%;
   max-width: 460px;
+  margin: 0 auto;
   background-color: var(--card-bg);
   border-radius: 16px;
   box-shadow: var(--card-shadow);
@@ -315,6 +316,8 @@ body {
 /* 6x6 Sudoku Board */
 .sudoku-board {
   width: 100%;
+  max-width: min(calc(100vw - 44px), 420px);
+  margin: 0 auto;
   aspect-ratio: 1 / 1;
   border: 3.5px solid var(--sudoku-border-color);
   border-radius: var(--sudoku-board-border-radius);

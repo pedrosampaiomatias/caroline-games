@@ -1915,13 +1915,9 @@ class WendApp {
         this.timerEl.textContent,
         solutionWords.length
       );
-      this.winPillsEl.innerHTML = this.guesses
-        .map((g) => {
-          const w = getWordString(g, puzzleLetters);
-          const col = getWordColor(colorContext, g.sequencingIndex[0]);
-          return `<span class="word-pill" style="background:${col}">${w}</span>`;
-        })
-        .join("");
+      if (this.winPillsEl) {
+        this.winPillsEl.innerHTML = "";
+      }
     } else {
       this.winBannerEl.classList.add("hidden");
     }

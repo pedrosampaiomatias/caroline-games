@@ -47,6 +47,22 @@
     return out;
   }
 
+  function getTodayCompactSeed() {
+    const d = new Date();
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${y}${m}${day}`;
+  }
+
+  function getTodayFormatted() {
+    const d = new Date();
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${y}-${m}-${day}`;
+  }
+
   function runWithSeed(seedStr, fn) {
     const seedFn = xmur3(String(seedStr));
     const prng = mulberry32(seedFn());
@@ -313,6 +329,19 @@
           sel.dispatchEvent(new Event("change"));
         }
       }
+
+      if (currentSeedToken === getTodayCompactSeed()) {
+        const todayStr = getTodayFormatted();
+        if (GAME_ID === "sudoku") {
+          const t = document.getElementById("puzzle-title");
+          if (t) t.textContent = `Daily • ${todayStr}`;
+          const d = document.getElementById("difficulty-pill");
+          if (d) d.textContent = "Daily 6×6";
+        } else {
+          const b = document.getElementById("edition-badge");
+          if (b) b.textContent = `Daily • ${todayStr}`;
+        }
+      }
       });
     } finally {
       isProgrammaticSeedLoad = false;
@@ -417,8 +446,9 @@
         }
         .in-suite-iframe .app-container,
         .in-suite-iframe .app-shell {
-          max-width: 100% !important;
+          max-width: 490px !important;
           width: 100% !important;
+          margin: 0 auto !important;
         }
         .in-suite-iframe #btn-dark-mode,
         .in-suite-iframe #btn-theme,
@@ -545,8 +575,47 @@
       { passive: true }
     );
 
-    // Check URL hash or query for direct standalone seed
+    // Check URL hash or query for direct standalone seed, or load Daily seed if standalone
     setTimeout(() => {
+      const hash = (window.location.hash || "").replace(/^#/, "").trim();
+      let codeToLoad = null;
+      if (hash.includes("code=")) {
+        const m = hash.match(/code=([^&]+)/i);
+        if (m) codeToLoad = decodeURIComponent(m[1]);
+      } else if (
+        hash.includes("-") &&
+        (hash.startsWith("SUDOKU-") ||
+          hash.startsWith("ZIP-") ||
+          hash.startsWith("TANGO-") ||
+          hash.startsWith("QUEENS-") ||
+          hash.startsWith("PATCHES-") ||
+          hash.startsWith("WEND-"))
+      ) {
+        codeToLoad = hash;
+      }
+
+      if (codeToLoad) {
+        const parts = codeToLoad.split("-");
+        const seed = parts[parts.length - 1];
+        let mode = parts.slice(1, -1).join("-") || DEFAULT_PROCEDURAL_MODE[GAME_ID];
+        let lang = "pt";
+        if (GAME_ID === "wend") {
+          if (parts[1] && (parts[1].toLowerCase() === "pt" || parts[1].toLowerCase() === "en")) {
+            lang = parts[1].toLowerCase();
+            mode = parts.slice(2, -1).join("-") || "gen-5x5-full";
+          }
+        }
+        loadSeededPuzzle({ mode, seed, lang });
+      } else if (!window.parent || window.parent === window) {
+        // Standalone mode: automatically load today's date-seeded puzzle!
+        loadSeededPuzzle({
+          mode: DEFAULT_PROCEDURAL_MODE[GAME_ID],
+          seed: getTodayCompactSeed(),
+          lang: "pt",
+          isDaily: true,
+        });
+      }
+
       broadcastPuzzleLoaded();
       postToSuite("SUITE_CHILD_READY", {
         challengeCode: getChallengeCode(),

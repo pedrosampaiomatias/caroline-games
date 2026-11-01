@@ -892,18 +892,14 @@ const ProceduralQueensGenerator = {
   },
 
   /**
-   * Grows N contiguous regions from the N Queen seed positions, biased so some regions stay small/tight
+   * Grows N contiguous regions from the N Queen seed positions, ensuring balanced region sizes
+   * without creating single-square color regions.
    */
   growInitialRegions(N, solution) {
     const total = N * N;
     const grid = new Array(total).fill(-1);
-    const regionWeights = new Array(N).fill(1);
-
-    // Give 2-3 regions smaller growth weights so they naturally form tight 1-4 cell regions
-    const order = this._shuffle([...Array(N).keys()]);
-    order.slice(0, Math.max(2, Math.floor(N / 3))).forEach((cId, i) => {
-      regionWeights[cId] = i === 0 ? 0.12 : 0.3;
-    });
+    const regionWeights = new Array(N).fill(1).map(() => 0.8 + Math.random() * 0.4);
+    const regionCounts = new Array(N).fill(1);
 
     solution.forEach((pos, colorId) => {
       grid[pos.row * N + pos.col] = colorId;
@@ -922,12 +918,15 @@ const ProceduralQueensGenerator = {
         if (c > 0 && grid[r * N + (c - 1)] !== -1) adjColors.push(grid[r * N + (c - 1)]);
         if (c < N - 1 && grid[r * N + (c + 1)] !== -1) adjColors.push(grid[r * N + (c + 1)]);
         for (const color of adjColors) {
-          frontier.push({ idx, color, weight: regionWeights[color] * (0.5 + Math.random()) });
+          // Strongly prioritize any region with 1 cell so no region is starved into a single square
+          const boost = regionCounts[color] <= 1 ? 4.5 : regionCounts[color] <= 2 ? 2.0 : 1.0;
+          frontier.push({ idx, color, weight: regionWeights[color] * boost * (0.8 + Math.random() * 0.4) });
         }
       }
       frontier.sort((a, b) => b.weight - a.weight);
       const chosen = frontier[0];
       grid[chosen.idx] = chosen.color;
+      regionCounts[chosen.color]++;
       unassigned--;
     }
 
@@ -935,7 +934,7 @@ const ProceduralQueensGenerator = {
   },
 
   /**
-   * Generates a guaranteed unique-solution Queens puzzle of size N × N
+   * Generates a guaranteed unique-solution Queens puzzle of size N × N with no single-cell regions
    */
   generate(N = 7) {
     for (let attempt = 0; attempt < 120; attempt++) {
@@ -943,18 +942,29 @@ const ProceduralQueensGenerator = {
       const seedSet = new Set(solution.map((s) => s.row * N + s.col));
       const grid = this.growInitialRegions(N, solution);
 
+      // Verify no single-cell regions exist
+      const initialSizes = new Array(N).fill(0);
+      grid.forEach((colId) => initialSizes[colId]++);
+      if (initialSizes.some((sz) => sz < 2)) {
+        continue;
+      }
+
       // Iteratively eliminate alternative solutions by reassigning boundary cells used by alternate solutions
       for (let refine = 0; refine < 60; refine++) {
         const res = this.countSolutions(N, grid, 2);
         if (res.count === 1) {
-          return {
-            id: `proc_${N}x${N}_${Date.now()}`,
-            title: `Procedural ${N}×${N}`,
-            edition: `Procedural ${N}×${N}`,
-            gridSize: N,
-            grid,
-            solution,
-          };
+          const finalSizes = new Array(N).fill(0);
+          grid.forEach((colId) => finalSizes[colId]++);
+          if (finalSizes.every((sz) => sz >= 2)) {
+            return {
+              id: `proc_${N}x${N}_${Date.now()}`,
+              title: `Procedural ${N}×${N}`,
+              edition: `Procedural ${N}×${N}`,
+              gridSize: N,
+              grid,
+              solution,
+            };
+          }
         }
         if (res.count === 0) break;
 
@@ -989,7 +999,8 @@ const ProceduralQueensGenerator = {
 
           for (const newColor of candidateColors) {
             grid[altIdx] = newColor;
-            if (this.isRegionConnected(N, grid, oldColor)) {
+            const remainingOld = grid.filter((co) => co === oldColor).length;
+            if (remainingOld >= 2 && this.isRegionConnected(N, grid, oldColor)) {
               modified = true;
               break;
             }
@@ -1014,7 +1025,8 @@ const ProceduralQueensGenerator = {
             if (nbColors.length === 0) continue;
             const newColor = nbColors[Math.floor(Math.random() * nbColors.length)];
             grid[idx] = newColor;
-            if (this.isRegionConnected(N, grid, oldColor)) {
+            const remainingOld = grid.filter((co) => co === oldColor).length;
+            if (remainingOld >= 2 && this.isRegionConnected(N, grid, oldColor)) {
               break;
             }
             grid[idx] = oldColor;
